@@ -7,8 +7,10 @@ public class BasicAI : MonoBehaviour {
     public Transform target;
     public Transform myTransform;
 
-	// Use this for initialization
-	void Start () {
+    private Animator aiAnim;
+
+    // Use this for initialization
+    void Start () {
 		
 	}
 	
@@ -16,5 +18,8 @@ public class BasicAI : MonoBehaviour {
 	void Update () {
         transform.LookAt(target);
         transform.Translate(Vector3.forward * 5 * Time.deltaTime);
-	}
+
+        aiAnim.SetFloat("AISpeed", 1);
+
+    }
 }

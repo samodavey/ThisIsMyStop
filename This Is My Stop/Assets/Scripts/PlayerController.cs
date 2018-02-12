@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
-    Animator anim;
+    private Animator anim;
 
 	// Use this for initialization
 	void Start () {
@@ -23,10 +23,5 @@ public class PlayerController : MonoBehaviour {
         anim.SetFloat("Speed", z);
         Debug.Log("Speed: " + z);
     }
-
-    //private void Move()
-    //{
-
-    //}
 
 }

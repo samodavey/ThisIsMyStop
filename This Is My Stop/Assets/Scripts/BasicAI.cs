@@ -6,7 +6,7 @@ public class BasicAI : MonoBehaviour {
 
     public Transform target;
     public Transform myTransform;
-    //public Transform allyTransform;
+    public List<Transform> allyTransforms;
 
     private bool hasLookedAt;
 
@@ -29,6 +29,16 @@ public class BasicAI : MonoBehaviour {
         //transform.Translate(Vector3.forward * 5 * Time.deltaTime);
 
         float steps = speed * Time.deltaTime;
+
+        for(int i = 0; i < allyTransforms.Capacity; i++)
+        {
+            Vector3 spaceFromFriendly = myTransform.position - allyTransforms[i].position;
+
+            if(Vector3.Distance(transform.position, allyTransforms[i].position) <= 5)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, spaceFromFriendly, steps);
+            }
+        }
 
         if (Vector3.Distance(transform.position, target.position) <= 5 )
         {

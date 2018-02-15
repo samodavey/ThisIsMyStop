@@ -6,20 +6,59 @@ public class BasicAI : MonoBehaviour {
 
     public Transform target;
     public Transform myTransform;
+    //public Transform allyTransform;
+
+    private bool hasLookedAt;
+
+    private Vector3 randomDir;
 
     private Animator aiAnim;
 
+    private float speed = 5;
+
+
     // Use this for initialization
     void Start () {
-		
-	}
+        aiAnim = GetComponent<Animator>();
+        hasLookedAt = false;
+    }
 	
 	// Update is called once per frame
 	void Update () {
-        transform.LookAt(target);
-        transform.Translate(Vector3.forward * 5 * Time.deltaTime);
 
-        aiAnim.SetFloat("AISpeed", 1);
+        //transform.Translate(Vector3.forward * 5 * Time.deltaTime);
 
+        float steps = speed * Time.deltaTime;
+
+        if (Vector3.Distance(transform.position, target.position) <= 5 )
+        {
+            if(hasLookedAt == false)
+            {
+                randomizeLookAt();
+            }
+
+            transform.position = Vector3.MoveTowards(transform.position, transform.position, steps);
+            transform.LookAt(randomDir);
+            aiAnim.SetFloat("AISpeed", 0);
+        }
+        else
+        {
+            transform.position = Vector3.MoveTowards(transform.position, target.position, steps);
+            transform.LookAt(target);
+            aiAnim.SetFloat("AISpeed", 1.0f);
+            hasLookedAt = false;
+        }
+
+        //if(Vector3.Distance(transform.position, allyTransform.position) <= 5)
+        //{
+        //    transform.position = Vector3.MoveTowards(transform.position, new Vector3(5, 0, 5), steps);
+        //}
+
+    }
+
+    private void randomizeLookAt()
+    {
+        hasLookedAt = true;
+        randomDir = new Vector3(Random.Range(-150.0f, 150.0f), 0, Random.Range(-150.0f, 150.0f));
     }
 }

@@ -30,17 +30,9 @@ public class BasicAI : MonoBehaviour {
 
         float steps = speed * Time.deltaTime;
 
-        for(int i = 0; i < allyTransforms.Capacity; i++)
-        {
-            Vector3 spaceFromFriendly = myTransform.position - allyTransforms[i].position;
-
-            if(Vector3.Distance(transform.position, allyTransforms[i].position) <= 5)
-            {
-                transform.position = Vector3.MoveTowards(transform.position, spaceFromFriendly, steps);
-            }
-        }
-
-        if (Vector3.Distance(transform.position, target.position) <= 5 )
+        
+        //Originally would avoid player, experiment with this a bit more?
+        if (Vector3.Distance(transform.position, target.position) <= 1 )
         {
             if(hasLookedAt == false)
             {
@@ -57,6 +49,17 @@ public class BasicAI : MonoBehaviour {
             transform.LookAt(target);
             aiAnim.SetFloat("AISpeed", 1.0f);
             hasLookedAt = false;
+
+            //for (int i = 0; i < allyTransforms.Capacity; i++)
+            //{
+            //    Vector3 spaceFromFriendly = myTransform.position - allyTransforms[i].position;
+
+            //    if (Vector3.Distance(transform.position, allyTransforms[i].position) <= 5)
+            //    {
+            //        transform.position = Vector3.MoveTowards(transform.position, spaceFromFriendly, steps);
+            //    }
+            //}
+
         }
 
         //if(Vector3.Distance(transform.position, allyTransform.position) <= 5)

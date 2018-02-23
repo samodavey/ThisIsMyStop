@@ -37,7 +37,8 @@ public class PlayerController : MonoBehaviour {
         player2.Translate(0, 0, b);
 
 
-        anim.SetFloat("Speed", z);
+        anim.SetFloat("Speed1", z);
+        anim.SetFloat("Speed2", b);
         //Debug.Log("Speed: " + z);
     }
 

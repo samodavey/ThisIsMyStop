@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
@@ -18,11 +20,22 @@ public class PlayerController : MonoBehaviour {
     //[SerializeField]
     //private Transform player4;
 
+    [SerializeField]
+    private Transform playerOneRagdoll;
+
+    [SerializeField]
+    private Transform playerTwoRagdoll;
+
+
     private bool punchTrigger1;
     private bool punchTrigger2;
 
     [SerializeField]
     private Collider playerOneFistCollider;
+
+    private int hitCount = 0;
+
+    private Transform newObject;
 
     // Use this for initialization
     void Start () {
@@ -72,20 +85,59 @@ public class PlayerController : MonoBehaviour {
         anim.SetBool("LightPunch", punchTrigger1);
         anim.SetBool("LightPunch2", punchTrigger2);
 
-        //Debug.Log("Speed is: " + z);
     }
 
-    private void OnCollisionEnter(Collision fistCollision)
+    public void OnTriggerEnter(Collider objectCollision)
     {
-        if(fistCollision.collider.gameObject == fistCollision.gameObject && fistCollision.gameObject.CompareTag("Team 2"))
+        if (objectCollision.gameObject.CompareTag("Team 2"))
         {
-            //Destroy(fistCollision.collider.gameObject);
-            fistCollision.collider.gameObject.SetActive(false);
-            Debug.Log("Hit Detected!");
+            newObject = (Transform)PrefabUtility.InstantiatePrefab(playerTwoRagdoll);
+            newObject.transform.position = objectCollision.transform.position;
+            newObject.transform.rotation = objectCollision.transform.rotation;
+
+            for (int i = objectCollision.transform.childCount - 1; i >= 0; --i)
+            {
+                Transform child = objectCollision.transform.GetChild(i);
+                Debug.Log("moving object: " + child.name);
+                child.SetParent(newObject.transform, false);
+
+                string childName = child.gameObject.name;
+
+                switch (childName)
+                {
+                    case "2nd Player Camera":
+                        child.transform.position = new Vector3(newObject.transform.position.x, 10,newObject.transform.position.z);
+                        //child.transform.rotation = new Quaternion(180, newObject.transform.rotation.y, newObject.transform.rotation.z,0);
+                        child.transform.rotation = Quaternion.RotateTowards(child.transform.rotation, new Quaternion(newObject.transform.rotation.x, newObject.transform.rotation.y, 90, 0), Time.deltaTime * 0.2f);
+                        break;
+                    case "Cube":
+                        child.gameObject.SetActive(false);
+                        break;
+                    case "Player 2 Circle":
+                        child.gameObject.SetActive(false);
+                        break;
+
+                    default:
+                        //child.transform.position = newObject.transform.position;
+                        //child.transform.rotation = newObject.transform.rotation;
+                        break;
+                }
+            }
+
+
+            objectCollision.gameObject.SetActive(false);
         }
     }
-    public void PrintEvent(string s)
+
+    public void punchCheck(int hitCount)
     {
-        Debug.Log("PrintEvent: " + s + " called at: " + Time.time);
+        if (hitCount == 1)
+        {
+            playerOneFistCollider.enabled = true;  
+        }
+        else if (hitCount == 0)
+        {
+            playerOneFistCollider.enabled = false;
+        }
     }
 }

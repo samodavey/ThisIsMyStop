@@ -8,6 +8,11 @@ public class PlayerController : MonoBehaviour {
 
     private Animator anim;
 
+    private int controllerNumber;
+    private string horizontalAxis;
+    private string verticalAxis;
+    private string xButton;
+
     [SerializeField]
     private Transform player1;
 
@@ -26,16 +31,26 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     private Transform playerTwoRagdoll;
 
-
-    private bool punchTrigger1;
-    private bool punchTrigger2;
-
     [SerializeField]
     private Collider playerOneFistCollider;
+
+    private int collisionCount = 0;
+
+    private bool lightPunchTrigger1;
+    private bool lightPunchTrigger2;
+
+    private bool heavyPunchTrigger1;
+    private bool heavyPunchTrigger2;
+
+    private bool takePunch1;
+    private bool takePunch2;
 
     private int hitCount = 0;
 
     private Transform newObject;
+
+    public float Horizontal { get; set; }
+    public float Vertical { get; set; }
 
     // Use this for initialization
     void Start () {
@@ -45,51 +60,84 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        //PLAYER 1 CONTROLS
-        var x = Input.GetAxis("Joy1_Horizontal") * Time.deltaTime * 150.0f;
-        var z = Input.GetAxis("Joy1_Vertical") * Time.deltaTime * -7.0f;
-        player1.Rotate(0, x, 0);
-        player1.Translate(0, 0, z);
+        ////PLAYER 1 CONTROLS
+        //var x = Input.GetAxis("Joy1_Horizontal") * Time.deltaTime * 150.0f;
+        //var z = Input.GetAxis("Joy1_Vertical") * Time.deltaTime * -7.0f;
+        //player1.Rotate(0, x, 0);
+        //player1.Translate(0, 0, z);
 
 
-        //PLAYER 2 CONTROLS
-        var a = Input.GetAxis("Joy2_Horizontal") * Time.deltaTime * 150.0f;
-        var b = Input.GetAxis("Joy2_Vertical") * Time.deltaTime * -7.0f;
-        player2.Rotate(0, a, 0);
-        player2.Translate(0, 0, b);
+        ////PLAYER 2 CONTROLS
+        //var a = Input.GetAxis("Joy2_Horizontal") * Time.deltaTime * 150.0f;
+        //var b = Input.GetAxis("Joy2_Vertical") * Time.deltaTime * -7.0f;
+        //player2.Rotate(0, a, 0);
+        //player2.Translate(0, 0, b);
 
 
-        //Make into a switch?
-        if(Input.GetKeyDown(KeyCode.Joystick1Button2))
+        ////Make into a switch?
+        ////Light Punches
+        //if(Input.GetKeyDown(KeyCode.Joystick1Button2))
+        //{
+        //    lightPunchTrigger1 = true;
+        //}
+        //else if (Input.GetKeyDown(KeyCode.Joystick2Button2))
+        //{
+        //    lightPunchTrigger2 = true;
+        //}
+        //else
+        //{
+        //    lightPunchTrigger1 = false;
+        //    lightPunchTrigger2 = false;
+        //}
+
+        ////Heavy Punches
+        //if (Input.GetKeyDown(KeyCode.Joystick1Button3))
+        //{
+        //    heavyPunchTrigger1 = true;
+        //}
+        //else if (Input.GetKeyDown(KeyCode.Joystick2Button3))
+        //{
+        //    heavyPunchTrigger2 = true;
+        //}
+        //else
+        //{
+        //    heavyPunchTrigger1 = false;
+        //    heavyPunchTrigger2 = false;
+        //}
+
+
+        //anim.SetFloat("Speed1", z);
+        //anim.SetFloat("Speed2", b);
+
+        //anim.SetBool("LightPunch", lightPunchTrigger1);
+        //anim.SetBool("LightPunch2", lightPunchTrigger2);
+
+        //anim.SetBool("HeavyPunch", heavyPunchTrigger1);
+        //anim.SetBool("HeavyPunch2", heavyPunchTrigger2);
+
+    }
+
+    private void FixedUpdate()
+    {
+        if(controllerNumber > 0)
         {
-            punchTrigger1 = true;
+            Horizontal = Input.GetAxis(horizontalAxis);
+            Vertical = Input.GetAxis(verticalAxis);
         }
-        else
-        {
-            punchTrigger1 = false;
-        }
+    }
 
-        if (Input.GetKeyDown(KeyCode.Joystick2Button2))
-        {
-            punchTrigger2 = true;
-        }
-        else
-        {
-            punchTrigger2 = false;
-        }
-
-
-        anim.SetFloat("Speed1", z);
-        anim.SetFloat("Speed2", b);
-
-        anim.SetBool("LightPunch", punchTrigger1);
-        anim.SetBool("LightPunch2", punchTrigger2);
-
+    private void SetControllerNumber(int number)
+    {
+        controllerNumber = number;
+        horizontalAxis = "Joy" + number + "_Horizontal";
+        verticalAxis = "Joy" + number + "_Vertical";
+        xButton = "Joy" + number + "_X";
     }
 
     public void OnTriggerEnter(Collider objectCollision)
     {
-        if (objectCollision.gameObject.CompareTag("Team 2"))
+        Debug.Log("Collided " + collisionCount + " times!");
+        if (objectCollision.gameObject.CompareTag("Team 2") && collisionCount == 3)
         {
             newObject = (Transform)PrefabUtility.InstantiatePrefab(playerTwoRagdoll);
             newObject.transform.position = objectCollision.transform.position;
@@ -98,7 +146,8 @@ public class PlayerController : MonoBehaviour {
             for (int i = objectCollision.transform.childCount - 1; i >= 0; --i)
             {
                 Transform child = objectCollision.transform.GetChild(i);
-                Debug.Log("moving object: " + child.name);
+                Quaternion newRot = new Quaternion(90, newObject.transform.rotation.y, newObject.transform.rotation.z, 0);
+                //Debug.Log("moving object: " + child.name);
                 child.SetParent(newObject.transform, false);
 
                 string childName = child.gameObject.name;
@@ -107,8 +156,7 @@ public class PlayerController : MonoBehaviour {
                 {
                     case "2nd Player Camera":
                         child.transform.position = new Vector3(newObject.transform.position.x, 10,newObject.transform.position.z);
-                        //child.transform.rotation = new Quaternion(180, newObject.transform.rotation.y, newObject.transform.rotation.z,0);
-                        child.transform.rotation = Quaternion.RotateTowards(child.transform.rotation, new Quaternion(newObject.transform.rotation.x, newObject.transform.rotation.y, 90, 0), Time.deltaTime * 0.2f);
+                        child.transform.rotation = Quaternion.Lerp(child.transform.rotation, newRot, Time.deltaTime * 0.5f);
                         break;
                     case "Cube":
                         child.gameObject.SetActive(false);
@@ -126,6 +174,12 @@ public class PlayerController : MonoBehaviour {
 
 
             objectCollision.gameObject.SetActive(false);
+        }
+        else if(objectCollision.gameObject.CompareTag("Team 2") && collisionCount < 3)
+        {
+            //anim.SetBool("TakePunch", takePunch1);
+            anim.SetBool("TakePunch2", takePunch2);
+            collisionCount++;
         }
     }
 

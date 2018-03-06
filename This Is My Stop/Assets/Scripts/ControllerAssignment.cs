@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,7 +14,15 @@ public class ControllerAssignment : MonoBehaviour {
 	void Update () {
 		for(int i = 0; i <= 4; i++)
         {
-            //if(Input)
+            if (Input.GetButton("Joy" + i + "_A"))
+            {
+                AddPlayerController(i);
+            }
         }
 	}
+
+    private void AddPlayerController(int controller)
+    {
+        throw new NotImplementedException();
+    }
 }

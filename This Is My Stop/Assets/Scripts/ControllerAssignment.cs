@@ -17,12 +17,16 @@ public class ControllerAssignment : MonoBehaviour {
             if (Input.GetButton("Joy" + i + "_A"))
             {
                 AddPlayerController(i);
+                break;
             }
         }
 	}
 
     private void AddPlayerController(int controller)
     {
-        throw new NotImplementedException();
+        for(int i = 0; i < 4; i++)
+        {
+
+        }
     }
 }

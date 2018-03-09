@@ -60,79 +60,79 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        ////PLAYER 1 CONTROLS
-        //var x = Input.GetAxis("Joy1_Horizontal") * Time.deltaTime * 150.0f;
-        //var z = Input.GetAxis("Joy1_Vertical") * Time.deltaTime * -7.0f;
-        //player1.Rotate(0, x, 0);
-        //player1.Translate(0, 0, z);
+        //PLAYER 1 CONTROLS
+        var x = Input.GetAxis("Joy1_Horizontal") * Time.deltaTime * 150.0f;
+        var z = Input.GetAxis("Joy1_Vertical") * Time.deltaTime * -7.0f;
+        player1.Rotate(0, x, 0);
+        player1.Translate(0, 0, z);
 
 
-        ////PLAYER 2 CONTROLS
-        //var a = Input.GetAxis("Joy2_Horizontal") * Time.deltaTime * 150.0f;
-        //var b = Input.GetAxis("Joy2_Vertical") * Time.deltaTime * -7.0f;
-        //player2.Rotate(0, a, 0);
-        //player2.Translate(0, 0, b);
+        //PLAYER 2 CONTROLS
+        var a = Input.GetAxis("Joy2_Horizontal") * Time.deltaTime * 150.0f;
+        var b = Input.GetAxis("Joy2_Vertical") * Time.deltaTime * -7.0f;
+        player2.Rotate(0, a, 0);
+        player2.Translate(0, 0, b);
 
 
-        ////Make into a switch?
-        ////Light Punches
-        //if(Input.GetKeyDown(KeyCode.Joystick1Button2))
-        //{
-        //    lightPunchTrigger1 = true;
-        //}
-        //else if (Input.GetKeyDown(KeyCode.Joystick2Button2))
-        //{
-        //    lightPunchTrigger2 = true;
-        //}
-        //else
-        //{
-        //    lightPunchTrigger1 = false;
-        //    lightPunchTrigger2 = false;
-        //}
-
-        ////Heavy Punches
-        //if (Input.GetKeyDown(KeyCode.Joystick1Button3))
-        //{
-        //    heavyPunchTrigger1 = true;
-        //}
-        //else if (Input.GetKeyDown(KeyCode.Joystick2Button3))
-        //{
-        //    heavyPunchTrigger2 = true;
-        //}
-        //else
-        //{
-        //    heavyPunchTrigger1 = false;
-        //    heavyPunchTrigger2 = false;
-        //}
-
-
-        //anim.SetFloat("Speed1", z);
-        //anim.SetFloat("Speed2", b);
-
-        //anim.SetBool("LightPunch", lightPunchTrigger1);
-        //anim.SetBool("LightPunch2", lightPunchTrigger2);
-
-        //anim.SetBool("HeavyPunch", heavyPunchTrigger1);
-        //anim.SetBool("HeavyPunch2", heavyPunchTrigger2);
-
-    }
-
-    private void FixedUpdate()
-    {
-        if(controllerNumber > 0)
+        //Make into a switch?
+        //Light Punches
+        if (Input.GetKeyDown(KeyCode.Joystick1Button2))
         {
-            Horizontal = Input.GetAxis(horizontalAxis);
-            Vertical = Input.GetAxis(verticalAxis);
+            lightPunchTrigger1 = true;
         }
+        else if (Input.GetKeyDown(KeyCode.Joystick2Button2))
+        {
+            lightPunchTrigger2 = true;
+        }
+        else
+        {
+            lightPunchTrigger1 = false;
+            lightPunchTrigger2 = false;
+        }
+
+        //Heavy Punches
+        if (Input.GetKeyDown(KeyCode.Joystick1Button3))
+        {
+            heavyPunchTrigger1 = true;
+        }
+        else if (Input.GetKeyDown(KeyCode.Joystick2Button3))
+        {
+            heavyPunchTrigger2 = true;
+        }
+        else
+        {
+            heavyPunchTrigger1 = false;
+            heavyPunchTrigger2 = false;
+        }
+
+
+        anim.SetFloat("Speed1", z);
+        anim.SetFloat("Speed2", b);
+
+        anim.SetBool("LightPunch", lightPunchTrigger1);
+        anim.SetBool("LightPunch2", lightPunchTrigger2);
+
+        anim.SetBool("HeavyPunch", heavyPunchTrigger1);
+        anim.SetBool("HeavyPunch2", heavyPunchTrigger2);
+
     }
 
-    private void SetControllerNumber(int number)
-    {
-        controllerNumber = number;
-        horizontalAxis = "Joy" + number + "_Horizontal";
-        verticalAxis = "Joy" + number + "_Vertical";
-        xButton = "Joy" + number + "_X";
-    }
+    //private void FixedUpdate()
+    //{
+    //    if(controllerNumber > 0)
+    //    {
+    //        Horizontal = Input.GetAxis(horizontalAxis);
+    //        Vertical = Input.GetAxis(verticalAxis);
+    //    }
+    //}
+
+    //private void SetControllerNumber(int number)
+    //{
+    //    controllerNumber = number;
+    //    horizontalAxis = "Joy" + number + "_Horizontal";
+    //    verticalAxis = "Joy" + number + "_Vertical";
+    //    xButton = "Joy" + number + "_X";
+    //}
 
     public void OnTriggerEnter(Collider objectCollision)
     {

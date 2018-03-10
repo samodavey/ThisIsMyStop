@@ -14,25 +14,43 @@ public class PlayerController : MonoBehaviour {
     private string xButton;
 
     [SerializeField]
+    private Camera playerOneCamera;
+
+    [SerializeField]
+    private Camera playerTwoCamera;
+
+    [SerializeField]
+    private Camera playerThreeCamera;
+
+    [SerializeField]
+    private Camera playerFourCamera;
+
+    [SerializeField]
     private Transform player1;
 
     [SerializeField]
     private Transform player2;
 
-    //[SerializeField]
-    //private Transform player3;
-
-    //[SerializeField]
-    //private Transform player4;
+    [SerializeField]
+    private Transform player3;
 
     [SerializeField]
-    private Transform playerOneRagdoll;
+    private Transform player4;
+
+    [SerializeField]
+    private Transform playerRagdoll;
 
     [SerializeField]
     private Transform playerTwoRagdoll;
 
     [SerializeField]
-    private Collider playerOneFistCollider;
+    private Transform playerThreeRagdoll;
+
+    [SerializeField]
+    private Transform playerFourRagdoll;
+
+    [SerializeField]
+    private Collider playerFistCollider;
 
     private int collisionCount = 0;
 
@@ -49,32 +67,93 @@ public class PlayerController : MonoBehaviour {
 
     private Transform newObject;
 
-    public float Horizontal { get; set; }
-    public float Vertical { get; set; }
 
     // Use this for initialization
     void Start () {
         anim = GetComponent<Animator>();
-        //playerOneFistCollider = GetComponent<Collider>();
-	}
+
+        // MOVE TO LOBBY AT SOME POINT
+
+        //if (Input.GetButton("Joy1_Start"))
+        //{
+
+        //}
+        //else if (Input.GetButton("Joy2_Start"))
+        //{
+
+        //}
+        //else if (Input.GetButton("Joy3_Start"))
+        //{
+
+        //}
+        //else if (Input.GetButton("Joy4_Start"))
+        //{
+
+        //}
+    }
 	
 	// Update is called once per frame
 	void Update () {
-        //PLAYER 1 CONTROLS
-        var x = Input.GetAxis("Joy1_Horizontal") * Time.deltaTime * 150.0f;
-        var z = Input.GetAxis("Joy1_Vertical") * Time.deltaTime * -7.0f;
-        player1.Rotate(0, x, 0);
-        player1.Translate(0, 0, z);
+        //Horizontal Values
+        var joyHor1 = Input.GetAxis("Joy1_Horizontal") * Time.deltaTime * 50.0f;
+        var joyHor2 = Input.GetAxis("Joy2_Horizontal") * Time.deltaTime * 50.0f;
+        var joyHor3 = Input.GetAxis("Joy3_Horizontal") * Time.deltaTime * 50.0f;
+        var joyHor4 = Input.GetAxis("Joy4_Horizontal") * Time.deltaTime * 50.0f;
+
+        //Vertical Values
+        var joyVert1 = Input.GetAxis("Joy1_Vertical") * Time.deltaTime * -5.0f;
+        var joyVert2 = Input.GetAxis("Joy2_Vertical") * Time.deltaTime * -5.0f;
+        var joyVert3 = Input.GetAxis("Joy3_Vertical") * Time.deltaTime * -5.0f;
+        var joyVert4 = Input.GetAxis("Joy4_Vertical") * Time.deltaTime * -5.0f;
+
+        //Camera Rotation Horizontal
+        var joyCamHor1 = Input.GetAxis("Joy1_CameraRotateHor") * Time.deltaTime * 7.0f;
+        var joyCamHor2 = Input.GetAxis("Joy2_CameraRotateHor") * Time.deltaTime * 7.0f;
+        var joyCamHor3 = Input.GetAxis("Joy3_CameraRotateHor") * Time.deltaTime * 7.0f;
+        var joyCamHor4 = Input.GetAxis("Joy4_CameraRotateHor") * Time.deltaTime * 7.0f;
+
+        //Camera Rotation Vertical
+        var joyCamVert1 = Input.GetAxis("Joy1_CameraRotateVert");
+        var joyCamVert2 = Input.GetAxis("Joy2_CameraRotateVert");
+        var joyCamVert3 = Input.GetAxis("Joy3_CameraRotateVert");
+        var joyCamVert4 = Input.GetAxis("Joy4_CameraRotateVert");
 
 
-        //PLAYER 2 CONTROLS
-        var a = Input.GetAxis("Joy2_Horizontal") * Time.deltaTime * 150.0f;
-        var b = Input.GetAxis("Joy2_Vertical") * Time.deltaTime * -7.0f;
-        player2.Rotate(0, a, 0);
-        player2.Translate(0, 0, b);
+        player1.Rotate(0, joyHor1, 0);
+        player1.Translate(0, 0, joyVert1);
+
+        playerOneCamera.transform.LookAt(player1);
+        playerOneCamera.transform.Rotate(-15, 0, 0);
+        playerOneCamera.transform.Translate(Vector3.right * joyCamHor1);
+
+        player2.Rotate(0, joyHor2, 0);
+        player2.Translate(0, 0, joyVert2);
+
+        playerTwoCamera.transform.LookAt(player2);
+        playerTwoCamera.transform.Rotate(-15, 0, 0);
+        playerTwoCamera.transform.Translate(Vector3.right * joyCamHor2);
+
+        player3.Rotate(0, joyHor3, 0);
+        player3.Translate(0, 0, joyVert3);
+
+        playerThreeCamera.transform.LookAt(player3);
+        playerThreeCamera.transform.Rotate(-15, 0, 0);
+        playerThreeCamera.transform.Translate(Vector3.right * joyCamHor3);
+
+        player4.Rotate(0, joyHor4, 0);
+        player4.Translate(0, 0, joyVert4);
+
+        playerFourCamera.transform.LookAt(player4);
+        playerFourCamera.transform.Rotate(-15, 0, 0);
+        playerFourCamera.transform.Translate(Vector3.right * joyCamHor4);
+
+        anim.SetFloat("Speed1", joyVert1);
+        anim.SetFloat("Speed2", joyVert2);
+        anim.SetFloat("Speed3", joyVert3);
+        anim.SetFloat("Speed4", joyVert4);
 
 
-        //Make into a switch?
+        //Make into a switch? (Can't be done!)
         //Light Punches
         if (Input.GetKeyDown(KeyCode.Joystick1Button2))
         {
@@ -89,6 +168,9 @@ public class PlayerController : MonoBehaviour {
             lightPunchTrigger1 = false;
             lightPunchTrigger2 = false;
         }
+
+        anim.SetBool("LightPunch", lightPunchTrigger1);
+        anim.SetBool("LightPunch2", lightPunchTrigger2);
 
         //Heavy Punches
         if (Input.GetKeyDown(KeyCode.Joystick1Button3))
@@ -105,34 +187,10 @@ public class PlayerController : MonoBehaviour {
             heavyPunchTrigger2 = false;
         }
 
-
-        anim.SetFloat("Speed1", z);
-        anim.SetFloat("Speed2", b);
-
-        anim.SetBool("LightPunch", lightPunchTrigger1);
-        anim.SetBool("LightPunch2", lightPunchTrigger2);
-
         anim.SetBool("HeavyPunch", heavyPunchTrigger1);
         anim.SetBool("HeavyPunch2", heavyPunchTrigger2);
 
     }
-
-    //private void FixedUpdate()
-    //{
-    //    if(controllerNumber > 0)
-    //    {
-    //        Horizontal = Input.GetAxis(horizontalAxis);
-    //        Vertical = Input.GetAxis(verticalAxis);
-    //    }
-    //}
-
-    //private void SetControllerNumber(int number)
-    //{
-    //    controllerNumber = number;
-    //    horizontalAxis = "Joy" + number + "_Horizontal";
-    //    verticalAxis = "Joy" + number + "_Vertical";
-    //    xButton = "Joy" + number + "_X";
-    //}
 
     public void OnTriggerEnter(Collider objectCollision)
     {
@@ -187,11 +245,11 @@ public class PlayerController : MonoBehaviour {
     {
         if (hitCount == 1)
         {
-            playerOneFistCollider.enabled = true;  
+            playerFistCollider.enabled = true;  
         }
         else if (hitCount == 0)
         {
-            playerOneFistCollider.enabled = false;
+            playerFistCollider.enabled = false;
         }
     }
 }

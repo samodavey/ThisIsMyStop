@@ -65,8 +65,9 @@ public class PlayerController : MonoBehaviour {
 
     private int hitCount = 0;
 
-    private Transform newObject;
+    public float currentHealth = 500f;
 
+    private Transform newObject;
 
     // Use this for initialization
     void Start () {
@@ -195,48 +196,51 @@ public class PlayerController : MonoBehaviour {
     public void OnTriggerEnter(Collider objectCollision)
     {
         Debug.Log("Collided " + collisionCount + " times!");
-        if (objectCollision.gameObject.CompareTag("Team 2") && collisionCount == 3)
+        currentHealth = currentHealth - 50;
+        playerHealth(currentHealth);
+        if (objectCollision.gameObject.CompareTag("Team 2"))
         {
-            newObject = (Transform)PrefabUtility.InstantiatePrefab(playerTwoRagdoll);
-            newObject.transform.position = objectCollision.transform.position;
-            newObject.transform.rotation = objectCollision.transform.rotation;
-
-            for (int i = objectCollision.transform.childCount - 1; i >= 0; --i)
+            anim.SetBool("TakePunch2", takePunch2);
+            if (currentHealth == 0)
             {
-                Transform child = objectCollision.transform.GetChild(i);
-                Quaternion newRot = new Quaternion(90, newObject.transform.rotation.y, newObject.transform.rotation.z, 0);
-                //Debug.Log("moving object: " + child.name);
-                child.SetParent(newObject.transform, false);
+                newObject = (Transform)PrefabUtility.InstantiatePrefab(playerTwoRagdoll);
+                newObject.transform.position = objectCollision.transform.position;
+                newObject.transform.rotation = objectCollision.transform.rotation;
 
-                string childName = child.gameObject.name;
-
-                switch (childName)
+                for (int i = objectCollision.transform.childCount - 1; i >= 0; --i)
                 {
-                    case "2nd Player Camera":
-                        child.transform.position = new Vector3(newObject.transform.position.x, 10,newObject.transform.position.z);
-                        child.transform.rotation = Quaternion.Lerp(child.transform.rotation, newRot, Time.deltaTime * 0.5f);
-                        break;
-                    case "Cube":
-                        child.gameObject.SetActive(false);
-                        break;
-                    case "Player 2 Circle":
-                        child.gameObject.SetActive(false);
-                        break;
+                    Transform child = objectCollision.transform.GetChild(i);
+                    Quaternion newRot = new Quaternion(90, newObject.transform.rotation.y, newObject.transform.rotation.z, 0);
+                    //Debug.Log("moving object: " + child.name);
+                    child.SetParent(newObject.transform, false);
 
-                    default:
-                        //child.transform.position = newObject.transform.position;
-                        //child.transform.rotation = newObject.transform.rotation;
-                        break;
+                    string childName = child.gameObject.name;
+
+                    switch (childName)
+                    {
+                        case "2nd Player Camera":
+                            child.transform.position = new Vector3(newObject.transform.position.x, 10, newObject.transform.position.z);
+                            child.transform.rotation = Quaternion.Lerp(child.transform.rotation, newRot, Time.deltaTime * 0.5f);
+                            break;
+                        case "Cube":
+                            child.gameObject.SetActive(false);
+                            break;
+                        case "Player 2 Circle":
+                            child.gameObject.SetActive(false);
+                            break;
+
+                        default:
+                            //child.transform.position = newObject.transform.position;
+                            //child.transform.rotation = newObject.transform.rotation;
+                            break;
+                    }
                 }
+                objectCollision.gameObject.SetActive(false);
             }
-
-
-            objectCollision.gameObject.SetActive(false);
         }
         else if(objectCollision.gameObject.CompareTag("Team 2") && collisionCount < 3)
         {
             //anim.SetBool("TakePunch", takePunch1);
-            anim.SetBool("TakePunch2", takePunch2);
             collisionCount++;
         }
     }
@@ -251,5 +255,11 @@ public class PlayerController : MonoBehaviour {
         {
             playerFistCollider.enabled = false;
         }
+    }
+
+    public float playerHealth(float playerHealth)
+    {
+        playerHealth = currentHealth;
+        return playerHealth;
     }
 }

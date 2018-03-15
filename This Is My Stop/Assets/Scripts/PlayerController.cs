@@ -13,6 +13,12 @@ public class PlayerController : MonoBehaviour {
     private string verticalAxis;
     private string xButton;
 
+    /// <summary>
+    /// I need to come up with a more efficient way of having each variable be unique to the character
+    /// rather than just having a whole bunch of variables
+    /// </summary>
+
+
     [SerializeField]
     private Camera playerOneCamera;
 
@@ -50,7 +56,16 @@ public class PlayerController : MonoBehaviour {
     private Transform playerFourRagdoll;
 
     [SerializeField]
-    private Collider playerFistCollider;
+    private Collider playerOneFistCollider;
+
+    [SerializeField]
+    private Collider playerTwoFistCollider;
+
+    [SerializeField]
+    private Collider playerThreeFistCollider;
+
+    [SerializeField]
+    private Collider playerFourFistCollider;
 
     private int collisionCount = 0;
 
@@ -65,7 +80,11 @@ public class PlayerController : MonoBehaviour {
 
     private int hitCount = 0;
 
-    public float currentHealth = 500f;
+    public float playerOneCurrentHealth = 500f;
+    public float playerTwoCurrentHealth = 500f;
+    public float playerThreeCurrentHealth = 500f;
+    public float playerFourCurrentHealth = 500f;
+
 
     private Transform newObject;
 
@@ -195,21 +214,27 @@ public class PlayerController : MonoBehaviour {
 
     public void OnTriggerEnter(Collider objectCollision)
     {
-        Debug.Log("Collided " + collisionCount + " times!");
-        currentHealth = currentHealth - 50;
-        playerHealth(currentHealth);
-        if (objectCollision.gameObject.CompareTag("Team 2"))
+
+        //MAYBE MAKE A FOR LOOP WHICH CYCLES THROUGH ALL THE TEAMS?
+
+
+        //ALSO PERHAPS ADD 3 TRIGGER COLLIDERS TO PLAYERS HEAD, CHEST, LEGS FOR TRIGGER + DAMAGE
+        //RATHER THAN FIST TRIGGER
+
+
+        if (objectCollision.gameObject.tag == "Team 1")
         {
-            anim.SetBool("TakePunch2", takePunch2);
-            if (currentHealth == 0)
+            playerOneCurrentHealth = playerOneCurrentHealth - 250;
+            anim.SetBool("TakePunch", takePunch1);
+            if (playerOneCurrentHealth == 0)
             {
-                newObject = (Transform)PrefabUtility.InstantiatePrefab(playerTwoRagdoll);
+                newObject = (Transform)PrefabUtility.InstantiatePrefab(playerRagdoll);
                 newObject.transform.position = objectCollision.transform.position;
                 newObject.transform.rotation = objectCollision.transform.rotation;
 
-                for (int i = objectCollision.transform.childCount - 1; i >= 0; --i)
+                for (int z = objectCollision.transform.childCount - 1; z >= 0; --z)
                 {
-                    Transform child = objectCollision.transform.GetChild(i);
+                    Transform child = objectCollision.transform.GetChild(z);
                     Quaternion newRot = new Quaternion(90, newObject.transform.rotation.y, newObject.transform.rotation.z, 0);
                     //Debug.Log("moving object: " + child.name);
                     child.SetParent(newObject.transform, false);
@@ -218,48 +243,93 @@ public class PlayerController : MonoBehaviour {
 
                     switch (childName)
                     {
-                        case "2nd Player Camera":
+                        case "Main Camera":
                             child.transform.position = new Vector3(newObject.transform.position.x, 10, newObject.transform.position.z);
                             child.transform.rotation = Quaternion.Lerp(child.transform.rotation, newRot, Time.deltaTime * 0.5f);
                             break;
                         case "Cube":
                             child.gameObject.SetActive(false);
                             break;
-                        case "Player 2 Circle":
+                        case "Player 1 Circle":
                             child.gameObject.SetActive(false);
                             break;
 
                         default:
-                            //child.transform.position = newObject.transform.position;
-                            //child.transform.rotation = newObject.transform.rotation;
                             break;
                     }
                 }
                 objectCollision.gameObject.SetActive(false);
             }
         }
-        else if(objectCollision.gameObject.CompareTag("Team 2") && collisionCount < 3)
-        {
-            //anim.SetBool("TakePunch", takePunch1);
-            collisionCount++;
+
+            //if (!objectCollision.gameObject.CompareTag("Team 1"))
+            //{
+            //    anim.SetBool("TakePunch2", takePunch2);
+            //    if (currentHealth == 0)
+            //    {
+            //        newObject = (Transform)PrefabUtility.InstantiatePrefab(playerTwoRagdoll);
+            //        newObject.transform.position = objectCollision.transform.position;
+            //        newObject.transform.rotation = objectCollision.transform.rotation;
+
+            //        for (int i = objectCollision.transform.childCount - 1; i >= 0; --i)
+            //        {
+            //            Transform child = objectCollision.transform.GetChild(i);
+            //            Quaternion newRot = new Quaternion(90, newObject.transform.rotation.y, newObject.transform.rotation.z, 0);
+            //            //Debug.Log("moving object: " + child.name);
+            //            child.SetParent(newObject.transform, false);
+
+            //            string childName = child.gameObject.name;
+
+            //            switch (childName)
+            //            {
+            //                case "2nd Player Camera":
+            //                    child.transform.position = new Vector3(newObject.transform.position.x, 10, newObject.transform.position.z);
+            //                    child.transform.rotation = Quaternion.Lerp(child.transform.rotation, newRot, Time.deltaTime * 0.5f);
+            //                    break;
+            //                case "Cube":
+            //                    child.gameObject.SetActive(false);
+            //                    break;
+            //                case "Player 2 Circle":
+            //                    child.gameObject.SetActive(false);
+            //                    break;
+
+            //                default:
+            //                    //child.transform.position = newObject.transform.position;
+            //                    //child.transform.rotation = newObject.transform.rotation;
+            //                    break;
+            //            }
+            //        }
+            //        objectCollision.gameObject.SetActive(false);
+            //    }
+            //}
+            //else if (objectCollision.gameObject.CompareTag("Team 2") && collisionCount < 3)
+            //{
+            //    //anim.SetBool("TakePunch", takePunch1);
+            //    collisionCount++;
+            //}
         }
-    }
 
     public void punchCheck(int hitCount)
     {
         if (hitCount == 1)
         {
-            playerFistCollider.enabled = true;  
+            playerOneFistCollider.enabled = true;
+            playerTwoFistCollider.enabled = true;
+            playerThreeFistCollider.enabled = true;
+            playerFourFistCollider.enabled = true;
         }
         else if (hitCount == 0)
         {
-            playerFistCollider.enabled = false;
+            playerOneFistCollider.enabled = false;
+            playerTwoFistCollider.enabled = false;
+            playerThreeFistCollider.enabled = false;
+            playerFourFistCollider.enabled = false;
         }
     }
 
     public float playerHealth(float playerHealth)
     {
-        playerHealth = currentHealth;
+        playerHealth = playerOneCurrentHealth;
         return playerHealth;
     }
 }

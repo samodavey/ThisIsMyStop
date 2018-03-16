@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+
 public class PlayerController : MonoBehaviour {
 
     private Animator anim;
@@ -18,6 +19,7 @@ public class PlayerController : MonoBehaviour {
     /// rather than just having a whole bunch of variables
     /// </summary>
 
+    public PlayerControlsSO playerControls;
 
     [SerializeField]
     private Camera playerOneCamera;
@@ -115,6 +117,11 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         //Horizontal Values
+
+
+        //var joyHor1 = Input.GetAxis(playerControls.horizontal) * Time.deltaTime * 50.0f;
+        //var joyVert1 = Input.GetAxis(playerControls.vertical) * Time.deltaTime * -5.0f;
+
         var joyHor1 = Input.GetAxis("Joy1_Horizontal") * Time.deltaTime * 50.0f;
         var joyHor2 = Input.GetAxis("Joy2_Horizontal") * Time.deltaTime * 50.0f;
         var joyHor3 = Input.GetAxis("Joy3_Horizontal") * Time.deltaTime * 50.0f;
@@ -222,8 +229,9 @@ public class PlayerController : MonoBehaviour {
         //RATHER THAN FIST TRIGGER
 
 
-        if (objectCollision.gameObject.tag == "Team 1")
-        {
+        //if (objectCollision.gameObject.tag == "Team 2")
+        //{
+            print(objectCollision);
             playerOneCurrentHealth = playerOneCurrentHealth - 250;
             anim.SetBool("TakePunch", takePunch1);
             if (playerOneCurrentHealth == 0)
@@ -260,7 +268,7 @@ public class PlayerController : MonoBehaviour {
                 }
                 objectCollision.gameObject.SetActive(false);
             }
-        }
+        //}
 
             //if (!objectCollision.gameObject.CompareTag("Team 1"))
             //{

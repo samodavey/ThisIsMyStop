@@ -3,9 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.AI;
 
 
 public class PlayerController : MonoBehaviour {
+
+    NavMeshAgent agent;
 
     private Animator anim;
 
@@ -38,7 +41,7 @@ public class PlayerController : MonoBehaviour {
     //[SerializeField]
     //private Collider playerFourFistCollider;
 
-    private int collisionCount = 0;
+    //private int collisionCount = 0;
     
     private bool lightPunchTrigger;
 
@@ -46,12 +49,16 @@ public class PlayerController : MonoBehaviour {
 
     private bool takePunch;
 
+    bool isDead = false;
+
     //private int hitCount = 0;
 
     private Transform newObject;
 
     // Use this for initialization
     void Start () {
+        agent = GetComponent<NavMeshAgent>();
+        agent.updateRotation = false;
         anim = GetComponent<Animator>();
 
         // MOVE TO LOBBY AT SOME POINT
@@ -77,13 +84,19 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         //Horizontal Value
-        var joyHor = Input.GetAxis(playerControls.horizontal) * Time.deltaTime * 150.0f;
+        var joyHor = Input.GetAxis(playerControls.horizontal); //* Time.deltaTime * 150.0f;
 
         //Vertical Value
-        var joyVert = Input.GetAxis(playerControls.vertical) * Time.deltaTime * -20.0f;
+        var joyVert = Input.GetAxis(playerControls.vertical); //* Time.deltaTime * -20.0f;
 
-        transform.Rotate(0, joyHor, 0);
-        transform.Translate(0, 0, joyVert);
+        var joyCamHor1 = Input.GetAxis("Joy1_CameraRotateHor");
+
+        transform.Rotate(0, joyCamHor1, 0);
+        //transform.Translate(0, 0, joyVert);
+
+        Vector3 move = new Vector3(joyHor, 0, -joyVert);
+
+        agent.Move(move);
 
         //Remove Camera Axis + stuff below
 
@@ -138,14 +151,16 @@ public class PlayerController : MonoBehaviour {
         //ALSO PERHAPS ADD 3 TRIGGER COLLIDERS TO PLAYERS HEAD, CHEST, LEGS FOR TRIGGER + DAMAGE
         //RATHER THAN FIST TRIGGER
 
-        print(other);
-            if (playerControls.health == 0)
+        //print(other);
+            if (playerControls.health == 0 && !isDead)
             {
+            isDead = true;
+            //GetComponent<Collider>().enabled = false;
                 //newObject = (Transform)PrefabUtility.InstantiatePrefab(playerControls.playerRagdoll);
                 newObject = (Transform)PrefabUtility.InstantiatePrefab(playerControls.playerRagdoll);
                 newObject.transform.position = other.transform.position;
                 newObject.transform.rotation = other.transform.rotation;
-
+                
                 for (int z = other.transform.childCount - 1; z >= 0; --z)
                 {
                     Transform child = other.transform.GetChild(z);
@@ -184,19 +199,25 @@ public class PlayerController : MonoBehaviour {
 
     public void punchCheck(int hitCount)
     {
-        //if (hitCount == 1)
-        //{
-        //    playerOneFistCollider.enabled = true;
-        //}
-        //else if (hitCount == 0)
-        //{
-        //    playerOneFistCollider.enabled = false;
-        //}
+        if (hitCount == 1)
+        {
+            //playerOneFistCollider.enabled = true;
+        }
+        else if (hitCount == 0)
+        {
+            //playerOneFistCollider.enabled = false;
+        }
     }
 
     public float playerHealth(float playerHealth)
     {
         //playerHealth = playerOneCurrentHealth;
         return playerHealth;
+    }
+
+    public void TakeDamage(int damage)
+    {
+        print("hit " + transform + " for " + damage);
+        // if health is zero, activate ragdoll here
     }
 }

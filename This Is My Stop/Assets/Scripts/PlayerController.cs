@@ -15,47 +15,16 @@ public class PlayerController : MonoBehaviour {
     private string xButton;
 
     /// <summary>
-    /// I need to come up with a more efficient way of having each variable be unique to the character
-    /// rather than just having a whole bunch of variables
+    /// This class focuses on player controls and actions
     /// </summary>
 
     public PlayerControlsSO playerControls;
 
-    //[SerializeField]
-    //private Camera playerOneCamera;
+    [SerializeField]
+    private Collider headCollider;
 
-    //[SerializeField]
-    //private Camera playerTwoCamera;
-
-    //[SerializeField]
-    //private Camera playerThreeCamera;
-
-    //[SerializeField]
-    //private Camera playerFourCamera;
-
-    //[SerializeField]
-    //private Transform player1;
-
-    //[SerializeField]
-    //private Transform player2;
-
-    //[SerializeField]
-    //private Transform player3;
-
-    //[SerializeField]
-    //private Transform player4;
-
-    //[SerializeField]
-    //private Transform playerRagdoll;
-
-    //[SerializeField]
-    //private Transform playerTwoRagdoll;
-
-    //[SerializeField]
-    //private Transform playerThreeRagdoll;
-
-    //[SerializeField]
-    //private Transform playerFourRagdoll;
+    [SerializeField]
+    private Collider middleCollider;
 
     //[SerializeField]
     //private Collider playerOneFistCollider;
@@ -70,23 +39,14 @@ public class PlayerController : MonoBehaviour {
     //private Collider playerFourFistCollider;
 
     private int collisionCount = 0;
+    
+    private bool lightPunchTrigger;
 
-    private bool lightPunchTrigger1;
-    private bool lightPunchTrigger2;
+    private bool heavyPunchTrigger;
 
-    private bool heavyPunchTrigger1;
-    private bool heavyPunchTrigger2;
+    private bool takePunch;
 
-    private bool takePunch1;
-    private bool takePunch2;
-
-    private int hitCount = 0;
-
-    //public float playerOneCurrentHealth = 500f;
-    //public float playerTwoCurrentHealth = 500f;
-    //public float playerThreeCurrentHealth = 500f;
-    //public float playerFourCurrentHealth = 500f;
-
+    //private int hitCount = 0;
 
     private Transform newObject;
 
@@ -125,6 +85,8 @@ public class PlayerController : MonoBehaviour {
         transform.Rotate(0, joyHor, 0);
         transform.Translate(0, 0, joyVert);
 
+        //Remove Camera Axis + stuff below
+
         //Camera Rotation Horizontal
         //var joyCamHor1 = Input.GetAxis("Joy1_CameraRotateHor") * Time.deltaTime * 7.0f;
         //var joyCamHor2 = Input.GetAxis("Joy2_CameraRotateHor") * Time.deltaTime * 7.0f;
@@ -136,50 +98,38 @@ public class PlayerController : MonoBehaviour {
         //var joyCamVert2 = Input.GetAxis("Joy2_CameraRotateVert");
         //var joyCamVert3 = Input.GetAxis("Joy3_CameraRotateVert");
         //var joyCamVert4 = Input.GetAxis("Joy4_CameraRotateVert");
-
-
+        
+        
         anim.SetFloat("Speed", joyVert);
 
         //Make into a switch?
         //Light Punches
-        if (Input.GetKeyDown(KeyCode.Joystick1Button2))
+        if (Input.GetKeyDown(playerControls.lightPunch))
         {
-            lightPunchTrigger1 = true;
-        }
-        else if (Input.GetKeyDown(KeyCode.Joystick2Button2))
-        {
-            lightPunchTrigger2 = true;
+            lightPunchTrigger = true;
         }
         else
         {
-            lightPunchTrigger1 = false;
-            lightPunchTrigger2 = false;
+            lightPunchTrigger = false;
         }
 
-        anim.SetBool("LightPunch", lightPunchTrigger1);
-        anim.SetBool("LightPunch2", lightPunchTrigger2);
+        anim.SetBool("LightPunch", lightPunchTrigger);
 
         //Heavy Punches
-        if (Input.GetKeyDown(KeyCode.Joystick1Button3))
+        if (Input.GetKeyDown(playerControls.heavyPunch))
         {
-            heavyPunchTrigger1 = true;
-        }
-        else if (Input.GetKeyDown(KeyCode.Joystick2Button3))
-        {
-            heavyPunchTrigger2 = true;
+            heavyPunchTrigger = true;
         }
         else
         {
-            heavyPunchTrigger1 = false;
-            heavyPunchTrigger2 = false;
+            heavyPunchTrigger = false;
         }
 
-        anim.SetBool("HeavyPunch", heavyPunchTrigger1);
-        anim.SetBool("HeavyPunch2", heavyPunchTrigger2);
+        anim.SetBool("HeavyPunch", heavyPunchTrigger);
 
     }
 
-    public void OnTriggerEnter(Collider objectCollision)
+    public void OnTriggerEnter(Collider other)
     {
 
         //MAYBE MAKE A FOR LOOP WHICH CYCLES THROUGH ALL THE TEAMS?
@@ -188,16 +138,17 @@ public class PlayerController : MonoBehaviour {
         //ALSO PERHAPS ADD 3 TRIGGER COLLIDERS TO PLAYERS HEAD, CHEST, LEGS FOR TRIGGER + DAMAGE
         //RATHER THAN FIST TRIGGER
 
-            print(objectCollision);
+        print(other);
             if (playerControls.health == 0)
             {
+                //newObject = (Transform)PrefabUtility.InstantiatePrefab(playerControls.playerRagdoll);
                 newObject = (Transform)PrefabUtility.InstantiatePrefab(playerControls.playerRagdoll);
-                newObject.transform.position = objectCollision.transform.position;
-                newObject.transform.rotation = objectCollision.transform.rotation;
+                newObject.transform.position = other.transform.position;
+                newObject.transform.rotation = other.transform.rotation;
 
-                for (int z = objectCollision.transform.childCount - 1; z >= 0; --z)
+                for (int z = other.transform.childCount - 1; z >= 0; --z)
                 {
-                    Transform child = objectCollision.transform.GetChild(z);
+                    Transform child = other.transform.GetChild(z);
                     Quaternion newRot = new Quaternion(90, newObject.transform.rotation.y, newObject.transform.rotation.z, 0);
                     //Debug.Log("moving object: " + child.name);
                     child.SetParent(newObject.transform, false);
@@ -221,31 +172,26 @@ public class PlayerController : MonoBehaviour {
                             break;
                     }
                 }
-                objectCollision.gameObject.SetActive(false);
+                other.gameObject.SetActive(false);
+                playerControls.health = 500;
             }
             else
             {
                 playerControls.health = playerControls.health - 250;
-                anim.SetBool("TakePunch", takePunch1);
+                anim.SetBool("TakePunch", takePunch);
             }
-        }
+    }
 
     public void punchCheck(int hitCount)
     {
-        if (hitCount == 1)
-        {
-            //playerOneFistCollider.enabled = true;
-            //playerTwoFistCollider.enabled = true;
-            //playerThreeFistCollider.enabled = true;
-            //playerFourFistCollider.enabled = true;
-        }
-        else if (hitCount == 0)
-        {
-            //playerOneFistCollider.enabled = false;
-            //playerTwoFistCollider.enabled = false;
-            //playerThreeFistCollider.enabled = false;
-            //playerFourFistCollider.enabled = false;
-        }
+        //if (hitCount == 1)
+        //{
+        //    playerOneFistCollider.enabled = true;
+        //}
+        //else if (hitCount == 0)
+        //{
+        //    playerOneFistCollider.enabled = false;
+        //}
     }
 
     public float playerHealth(float playerHealth)

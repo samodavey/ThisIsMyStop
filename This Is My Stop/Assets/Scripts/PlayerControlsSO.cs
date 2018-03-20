@@ -9,6 +9,8 @@ public class PlayerControlsSO : ScriptableObject
     public string horizontal;
     public string vertical;
     public int health;
+    public KeyCode lightPunch;
+    public KeyCode heavyPunch;
     public Camera camera;
     public Transform playerTransform;
     public Transform playerRagdoll;

@@ -8,9 +8,7 @@ public class HealthBar : MonoBehaviour {
     [SerializeField]
     private Image content;
 
-    private float playerHealth = 500f;
-
-    PlayerController playerController = new PlayerController();
+    public PlayerControlsSO playerControls;
 
 	// Use this for initialization
 	void Start () {
@@ -22,11 +20,10 @@ public class HealthBar : MonoBehaviour {
         HandleBar();
     }
 
-    private void HandleBar()
+    public void HandleBar()
     {
-        float barHealth = playerController.playerHealth(playerHealth);
+        float barHealth = playerControls.health;
         content.fillAmount = Map(barHealth, 0,500,0,1);
-        //^^Update with player health value!
     }
 
     private float Map(float val, float inMin, float inMax, float outMin, float outMax)

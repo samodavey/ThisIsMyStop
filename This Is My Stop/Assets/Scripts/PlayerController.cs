@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
-
+using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour {
 
@@ -22,16 +22,16 @@ public class PlayerController : MonoBehaviour {
     /// </summary>
 
     public PlayerControlsSO playerControls;
-    
+
+    public UnityEvent onDamage;
+
     private bool lightPunchTrigger;
 
     private bool heavyPunchTrigger;
 
     private bool takePunch;
 
-    bool isDead = false;
-
-    //private int hitCount = 0;
+    private bool isDead = false;
 
     private Transform newObject;
 
@@ -168,6 +168,7 @@ public class PlayerController : MonoBehaviour {
         {
             takePunch = true;
             playerControls.health = playerControls.health - damage;
+            onDamage.Invoke();
         }
     }
 }

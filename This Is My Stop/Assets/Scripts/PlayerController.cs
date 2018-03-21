@@ -22,26 +22,6 @@ public class PlayerController : MonoBehaviour {
     /// </summary>
 
     public PlayerControlsSO playerControls;
-
-    [SerializeField]
-    private Collider headCollider;
-
-    [SerializeField]
-    private Collider middleCollider;
-
-    //[SerializeField]
-    //private Collider playerOneFistCollider;
-
-    //[SerializeField]
-    //private Collider playerTwoFistCollider;
-
-    //[SerializeField]
-    //private Collider playerThreeFistCollider;
-
-    //[SerializeField]
-    //private Collider playerFourFistCollider;
-
-    //private int collisionCount = 0;
     
     private bool lightPunchTrigger;
 
@@ -60,7 +40,7 @@ public class PlayerController : MonoBehaviour {
         agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;
         anim = GetComponent<Animator>();
-
+        playerControls.health = 500;
         // MOVE TO LOBBY AT SOME POINT
 
         //if (Input.GetButton("Joy1_Start"))
@@ -84,33 +64,29 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         //Horizontal Value
-        var joyHor = Input.GetAxis(playerControls.horizontal); //* Time.deltaTime * 150.0f;
+        var joyHor = Input.GetAxis(playerControls.horizontal) * Time.deltaTime * 150.0f;
 
         //Vertical Value
-        var joyVert = Input.GetAxis(playerControls.vertical); //* Time.deltaTime * -20.0f;
+        var joyVert = Input.GetAxis(playerControls.vertical) * Time.deltaTime * -20.0f;
 
-        var joyCamHor1 = Input.GetAxis("Joy1_CameraRotateHor");
+        var joyCamHor = Input.GetAxis(playerControls.camHor) * Time.deltaTime * 170.0f;
 
-        transform.Rotate(0, joyCamHor1, 0);
-        //transform.Translate(0, 0, joyVert);
+        transform.Rotate(0, joyCamHor, 0);
+        transform.Rotate(0, joyHor, 0);
+        transform.Translate(0, 0, joyVert);
 
         Vector3 move = new Vector3(joyHor, 0, -joyVert);
 
-        agent.Move(move);
+        //if(move.x != 0 || move.z != 0)
+        //{
+        //    //transform.rotation = Quaternion.Euler(transform.eulerAngles.x,Camera.main.transform.eulerAngles.y,transform.eulerAngles.z);
+        //}
+
+        //agent.Move(move);
+
+        //move = transform.TransformDirection(move);
 
         //Remove Camera Axis + stuff below
-
-        //Camera Rotation Horizontal
-        //var joyCamHor1 = Input.GetAxis("Joy1_CameraRotateHor") * Time.deltaTime * 7.0f;
-        //var joyCamHor2 = Input.GetAxis("Joy2_CameraRotateHor") * Time.deltaTime * 7.0f;
-        //var joyCamHor3 = Input.GetAxis("Joy3_CameraRotateHor") * Time.deltaTime * 7.0f;
-        //var joyCamHor4 = Input.GetAxis("Joy4_CameraRotateHor") * Time.deltaTime * 7.0f;
-
-        //Camera Rotation Vertical
-        //var joyCamVert1 = Input.GetAxis("Joy1_CameraRotateVert");
-        //var joyCamVert2 = Input.GetAxis("Joy2_CameraRotateVert");
-        //var joyCamVert3 = Input.GetAxis("Joy3_CameraRotateVert");
-        //var joyCamVert4 = Input.GetAxis("Joy4_CameraRotateVert");
         
         
         anim.SetFloat("Speed", joyVert);
@@ -140,73 +116,34 @@ public class PlayerController : MonoBehaviour {
 
         anim.SetBool("HeavyPunch", heavyPunchTrigger);
 
-    }
 
-    public void OnTriggerEnter(Collider other)
-    {
+        anim.SetBool("TakePunch", takePunch);
 
-        //MAYBE MAKE A FOR LOOP WHICH CYCLES THROUGH ALL THE TEAMS?
-
-
-        //ALSO PERHAPS ADD 3 TRIGGER COLLIDERS TO PLAYERS HEAD, CHEST, LEGS FOR TRIGGER + DAMAGE
-        //RATHER THAN FIST TRIGGER
-
-        //print(other);
-            if (playerControls.health == 0 && !isDead)
-            {
-            isDead = true;
-            //GetComponent<Collider>().enabled = false;
-                //newObject = (Transform)PrefabUtility.InstantiatePrefab(playerControls.playerRagdoll);
-                newObject = (Transform)PrefabUtility.InstantiatePrefab(playerControls.playerRagdoll);
-                newObject.transform.position = other.transform.position;
-                newObject.transform.rotation = other.transform.rotation;
-                
-                for (int z = other.transform.childCount - 1; z >= 0; --z)
-                {
-                    Transform child = other.transform.GetChild(z);
-                    Quaternion newRot = new Quaternion(90, newObject.transform.rotation.y, newObject.transform.rotation.z, 0);
-                    //Debug.Log("moving object: " + child.name);
-                    child.SetParent(newObject.transform, false);
-
-                    string childName = child.gameObject.name;
-
-                    switch (childName)
-                    {
-                        case "Main Camera":
-                            child.transform.position = new Vector3(newObject.transform.position.x, 10, newObject.transform.position.z);
-                            child.transform.rotation = Quaternion.Lerp(child.transform.rotation, newRot, Time.deltaTime * 0.5f);
-                            break;
-                        case "Cube":
-                            child.gameObject.SetActive(false);
-                            break;
-                        case "Player 1 Circle":
-                            child.gameObject.SetActive(false);
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-                other.gameObject.SetActive(false);
-                playerControls.health = 500;
-            }
-            else
-            {
-                playerControls.health = playerControls.health - 250;
-                anim.SetBool("TakePunch", takePunch);
-            }
     }
 
     public void punchCheck(int hitCount)
     {
-        if (hitCount == 1)
+        Collider[] attackCollider = GetComponentsInChildren<Collider>();
+        for(int i = 0; i < attackCollider.Length; i++)
         {
-            //playerOneFistCollider.enabled = true;
+            if (hitCount == 1 && attackCollider[i].gameObject.tag == "DamageObj")
+            {
+                attackCollider[i].GetComponent<Collider>().enabled = true;
+            }
+            else if (hitCount == 0)
+            {
+                attackCollider[i].GetComponent<Collider>().enabled = false;
+            }
         }
-        else if (hitCount == 0)
+    }
+
+    public void AlertObservers(string message)
+    {
+        if(message == "Animation Ended")
         {
-            //playerOneFistCollider.enabled = false;
+            takePunch = false;
         }
+
     }
 
     public float playerHealth(float playerHealth)
@@ -218,6 +155,19 @@ public class PlayerController : MonoBehaviour {
     public void TakeDamage(int damage)
     {
         print("hit " + transform + " for " + damage);
-        // if health is zero, activate ragdoll here
+        if (playerControls.health == 0 && !isDead)
+        {
+            isDead = true;
+            //takePunch = false;
+            newObject = (Transform)PrefabUtility.InstantiatePrefab(playerControls.playerRagdoll);
+            newObject.transform.position = transform.position;
+            newObject.transform.rotation = transform.rotation;
+            gameObject.SetActive(false);
+        }
+        else
+        {
+            takePunch = true;
+            playerControls.health = playerControls.health - damage;
+        }
     }
 }

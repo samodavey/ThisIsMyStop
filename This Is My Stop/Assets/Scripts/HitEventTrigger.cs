@@ -14,7 +14,10 @@ public class HitEventTrigger : MonoBehaviour
 	// Update is called once per frame
 	void OnTriggerEnter (Collider other)
     {
-        other.SendMessage("TakeDamage", 10, SendMessageOptions.DontRequireReceiver);
-        onHit.Invoke();	
+        if(other.tag == "DamageObj")
+        {
+            other.SendMessage("TakeDamage", 10, SendMessageOptions.DontRequireReceiver);
+            onHit.Invoke();
+        }
 	}
 }

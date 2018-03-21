@@ -8,6 +8,7 @@ public class PlayerControlsSO : ScriptableObject
 {
     public string horizontal;
     public string vertical;
+    public string camHor;
     public int health;
     public KeyCode lightPunch;
     public KeyCode heavyPunch;

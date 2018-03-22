@@ -29,7 +29,9 @@ public class PlayerController : MonoBehaviour {
 
     private bool heavyPunchTrigger;
 
-    private bool takePunch;
+    private bool blockTrigger;
+
+    private bool takePunchTrigger;
 
     private bool isDead = false;
 
@@ -76,22 +78,9 @@ public class PlayerController : MonoBehaviour {
         transform.Translate(0, 0, joyVert);
 
         Vector3 move = new Vector3(joyHor, 0, -joyVert);
-
-        //if(move.x != 0 || move.z != 0)
-        //{
-        //    //transform.rotation = Quaternion.Euler(transform.eulerAngles.x,Camera.main.transform.eulerAngles.y,transform.eulerAngles.z);
-        //}
-
-        //agent.Move(move);
-
-        //move = transform.TransformDirection(move);
-
-        //Remove Camera Axis + stuff below
-        
-        
+          
         anim.SetFloat("Speed", joyVert);
 
-        //Make into a switch?
         //Light Punches
         if (Input.GetKeyDown(playerControls.lightPunch))
         {
@@ -116,8 +105,18 @@ public class PlayerController : MonoBehaviour {
 
         anim.SetBool("HeavyPunch", heavyPunchTrigger);
 
+        //Blocking
+        if (Input.GetKey(playerControls.blocking))
+        {
+            blockTrigger = true;
+        }
+        else
+        {
+            blockTrigger = false;
+        }
+        anim.SetBool("Blocking", blockTrigger);
 
-        anim.SetBool("TakePunch", takePunch);
+        anim.SetBool("TakePunch", takePunchTrigger);
 
     }
 
@@ -141,7 +140,7 @@ public class PlayerController : MonoBehaviour {
     {
         if(message == "Animation Ended")
         {
-            takePunch = false;
+            takePunchTrigger = false;
         }
 
     }
@@ -166,7 +165,7 @@ public class PlayerController : MonoBehaviour {
         }
         else
         {
-            takePunch = true;
+            takePunchTrigger = true;
             playerControls.health = playerControls.health - damage;
             onDamage.Invoke();
         }

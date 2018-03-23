@@ -136,6 +136,14 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    public void startBlock(string message)
+    {
+        if(message == "Start Blocking")
+        {
+
+        }
+    }
+
     public void AlertObservers(string message)
     {
         if(message == "Animation Ended")

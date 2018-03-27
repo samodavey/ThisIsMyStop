@@ -16,7 +16,7 @@ public class HitEventTrigger : MonoBehaviour
     {
         if(other.tag == "DamageObj")
         {
-            other.SendMessage("TakeDamage", 10, SendMessageOptions.DontRequireReceiver);
+            //other.SendMessage("TakeDamage", 10, SendMessageOptions.DontRequireReceiver);
             onHit.Invoke();
         }
 	}

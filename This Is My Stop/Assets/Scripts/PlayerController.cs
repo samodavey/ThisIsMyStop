@@ -25,6 +25,8 @@ public class PlayerController : MonoBehaviour {
 
     public UnityEvent onDamage;
 
+    private int timePunch;
+
     private bool lightPunchTrigger;
 
     private bool heavyPunchTrigger;
@@ -82,16 +84,84 @@ public class PlayerController : MonoBehaviour {
         anim.SetFloat("Speed", joyVert);
 
         //Light Punches
+        //switch (timePunch)
+        //{
+        //    case 0:
+        //        if (Input.GetKeyDown(playerControls.lightPunch))
+        //        {
+        //            lightPunchTrigger = true;
+        //            anim.SetBool("LightPunch", lightPunchTrigger);
+        //            if (anim.GetCurrentAnimatorStateInfo(0).IsName("LightPunch"))
+        //            {
+        //                anim.SetBool("LightPunch", false);
+        //                timePunch++;
+        //            }
+        //        }
+        //        break;
+        //    case 1:
+        //        if (Input.GetKeyDown(playerControls.lightPunch))
+        //        {
+        //            lightPunchTrigger = true;
+        //            anim.SetBool("LightPunch", false);
+        //            anim.SetBool("LightPunch2", lightPunchTrigger);
+        //            anim.SetBool("LightPunch3", false);
+        //            timePunch++;
+        //        }
+        //        break;
+        //    case 2:
+        //        if (Input.GetKeyDown(playerControls.lightPunch))
+        //        {
+        //            lightPunchTrigger = true;
+        //            anim.SetBool("LightPunch", false);
+        //            anim.SetBool("LightPunch2", false);
+        //            anim.SetBool("LightPunch3", lightPunchTrigger);
+        //            timePunch++;
+        //        }
+        //        break;
+        //    default:
+        //        anim.SetBool("LightPunch", false);
+        //        anim.SetBool("LightPunch2", false);
+        //        anim.SetBool("LightPunch3", false);
+        //        break;
+        //}
+
+        Mathf.Clamp(timePunch, 0, 2);
         if (Input.GetKeyDown(playerControls.lightPunch))
         {
             lightPunchTrigger = true;
+            switch (timePunch)
+            {
+                case 0:
+                    anim.SetBool("LightPunch1", lightPunchTrigger);
+                    timePunch++;
+                    break;
+                case 1:
+                    anim.SetBool("LightPunch2", lightPunchTrigger);
+                    timePunch++;
+                    break;
+                case 2:
+                    anim.SetBool("LightPunch3", lightPunchTrigger);
+                    timePunch++;
+                    break;
+                //case 3:
+                //    break;
+                default:
+                    anim.SetBool("LightPunch", false);
+                    anim.SetBool("LightPunch2", false);
+                    anim.SetBool("LightPunch3", false);
+                    timePunch = 0;
+                    break;
+            }
         }
-        else
+        for (int i = 0; i <= 3; i++)
         {
-            lightPunchTrigger = false;
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Light Punch " + i))
+            {
+                anim.SetBool("LightPunch" + i, false);
+            }
         }
 
-        anim.SetBool("LightPunch", lightPunchTrigger);
+        Debug.Log(timePunch);
 
         //Heavy Punches
         if (Input.GetKeyDown(playerControls.heavyPunch))

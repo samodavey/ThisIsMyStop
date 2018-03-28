@@ -12,6 +12,7 @@ public class PlayerControlsSO : ScriptableObject
     public int health;
     public KeyCode lightPunch;
     public KeyCode heavyPunch;
+    public KeyCode kick;
     public KeyCode blocking;
     public Camera camera;
     public Transform playerTransform;

@@ -6,18 +6,31 @@ using UnityEngine.Events;
 public class HitEventTrigger : MonoBehaviour
 {
     public UnityEvent onHit;
+
 	// Use this for initialization
 	void Start () {
-		
+
 	}
-	
-	// Update is called once per frame
-	void OnTriggerEnter (Collider other)
+
+    // Update is called once per frame
+    private void Update()
     {
-        if(other.tag == "DamageObj")
+
+    }
+
+    void OnTriggerEnter (Collider other)
+    {
+        Animator anim = GetComponentInParent<Animator>();
+        if (other.tag == "DamageObj" && !anim.GetCurrentAnimatorStateInfo(0).IsName("Blocking"))
         {
             //other.SendMessage("TakeDamage", 10, SendMessageOptions.DontRequireReceiver);
+            Debug.Log("IT WORKS");
             onHit.Invoke();
+        }
+        else if(other.tag == "DamageObj" && anim.GetCurrentAnimatorStateInfo(0).IsName("Blocking"))
+        {
+            //anim.SetBool("Blocking", false);
+            anim.SetBool("BlockReact", true);
         }
 	}
 }

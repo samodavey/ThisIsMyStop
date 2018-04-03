@@ -51,24 +51,6 @@ public class PlayerController : MonoBehaviour {
         agent.updateRotation = false;
         anim = GetComponent<Animator>();
         playerControls.health = 500;
-        // MOVE TO LOBBY AT SOME POINT
-
-        //if (Input.GetButton("Joy1_Start"))
-        //{
-
-        //}
-        //else if (Input.GetButton("Joy2_Start"))
-        //{
-
-        //}
-        //else if (Input.GetButton("Joy3_Start"))
-        //{
-
-        //}
-        //else if (Input.GetButton("Joy4_Start"))
-        //{
-
-        //}
     }
 	
 	// Update is called once per frame

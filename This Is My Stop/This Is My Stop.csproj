@@ -331,6 +331,7 @@
     <Compile Include="Assets\Scripts\ControllerAssignment.cs" />
     <Compile Include="Assets\Scripts\HealthBar.cs" />
     <Compile Include="Assets\Scripts\HitEventTrigger.cs" />
+    <Compile Include="Assets\Scripts\LobbySystem.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />
     <Compile Include="Assets\Scripts\PlayerControlsSO.cs" />
   </ItemGroup>

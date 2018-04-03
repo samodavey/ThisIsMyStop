@@ -24,7 +24,6 @@ public class HitEventTrigger : MonoBehaviour
         if (other.tag == "DamageObj" && !anim.GetCurrentAnimatorStateInfo(0).IsName("Blocking"))
         {
             //other.SendMessage("TakeDamage", 10, SendMessageOptions.DontRequireReceiver);
-            Debug.Log("IT WORKS");
             onHit.Invoke();
         }
         else if(other.tag == "DamageObj" && anim.GetCurrentAnimatorStateInfo(0).IsName("Blocking"))

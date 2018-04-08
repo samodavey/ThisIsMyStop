@@ -16,6 +16,7 @@ public class PlayerControlsSO : ScriptableObject
     public KeyCode blocking;
     public KeyCode lobbyJoin;
     public KeyCode lobbyLeave;
+    public KeyCode lobbyReady;
     public Camera camera;
     public Transform playerTransform;
     public Transform playerRagdoll;

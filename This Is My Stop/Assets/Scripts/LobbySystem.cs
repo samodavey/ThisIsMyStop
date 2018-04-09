@@ -12,13 +12,21 @@ public class LobbySystem : MonoBehaviour {
     [SerializeField]
     Canvas canvas;
 
+    [SerializeField]
+    private Image timerContent;
+
     public PlayerControlsSO[] playerControllers;
 
     private int playersConnected;
     private bool[] playerEntered = new bool[4];
     private bool awayFromTitle;
+
     private List<GameObject> panels = new List<GameObject>();
     private List<GameObject> panelItem = new List<GameObject>();
+
+    private float timeLeft = 10.0f;
+    private bool timerEnabled;
+    private bool lockedIn;
 
     // Use this for initialization
     void Start () {
@@ -55,32 +63,52 @@ public class LobbySystem : MonoBehaviour {
 
         for (int i = 0; i < playerControllers.Length; i++)
         {
-            if (Input.GetKeyDown(playerControllers[i].lobbyJoin) && playerEntered[i] == false )
+            if (Input.GetKeyDown(playerControllers[i].lobbyJoin) && playerEntered[i] == false)
             {
                 PlayerJoined(i);
             }
-            else if (Input.GetKeyDown(playerControllers[i].lobbyLeave) && playerEntered[i] == true)
+            else if (Input.GetKeyDown(playerControllers[i].lobbyLeave) && playerEntered[i] == true && lockedIn == false)
             {
                 PlayerLeft(i);
                 //print("Player " + i + " has left");
             }
             else if (Input.GetKeyDown(playerControllers[i].lobbyReady) && playerEntered[i] == true)
             {
-                LoadGame(playersConnected);
+                //LoadGame(playersConnected);
+                lockedIn = true;
+                timerEnabled = true;
             }
 
         }
+
+        if (timerEnabled)
+        {
+            timeLeft -= Time.deltaTime;
+            timeLeft = Mathf.Clamp(timeLeft, 0, 10);
+
+            GameObject timer = canvas.transform.GetChild(6).gameObject;
+            GameObject timerNumber = timer.transform.GetChild(0).gameObject;
+
+            timer.SetActive(true);
+            timerContent.fillAmount -= 0.1f * Time.deltaTime;
+            timerNumber.GetComponent<Text>().text = timeLeft.ToString("F0");
+
+            if (timeLeft == 0)
+            {
+                SceneManager.LoadScene("MainScene");
+            }
+        }
+
         Debug.Log(playersConnected);
     }
 
-    public void LoadGame(int playerCount)
-    {
-        //When all players are ready then load the game passing appropriate variables
-        print("THERE ARE " + playerCount + " PLAYERS JOINING");
+    //public void LoadGame(int playerCount)
+    //{
+    //    //When all players are ready then load the game passing appropriate variables
+    //    //print("THERE ARE " + playerCount + " PLAYERS JOINING");
 
-        SceneManager.LoadScene("MainScene");
 
-    }
+    //}
 
     public void PlayerJoined(int playerNumber)
     {

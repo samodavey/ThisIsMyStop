@@ -27,6 +27,7 @@ public class LobbySystem : MonoBehaviour {
     private float timeLeft = 10.0f;
     private bool timerEnabled;
     private bool lockedIn;
+    private int playerReadied = 0;
 
     // Use this for initialization
     void Start () {
@@ -77,11 +78,12 @@ public class LobbySystem : MonoBehaviour {
                 //LoadGame(playersConnected);
                 lockedIn = true;
                 timerEnabled = true;
+                playerReadied++;
             }
 
         }
 
-        if (timerEnabled)
+        if (timerEnabled && playerReadied == playersConnected)
         {
             timeLeft -= Time.deltaTime;
             timeLeft = Mathf.Clamp(timeLeft, 0, 10);

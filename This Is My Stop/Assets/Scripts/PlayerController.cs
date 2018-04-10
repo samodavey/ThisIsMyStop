@@ -3,8 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.AI;
+using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour {
+
+    NavMeshAgent agent;
 
     private Animator anim;
 
@@ -13,243 +17,233 @@ public class PlayerController : MonoBehaviour {
     private string verticalAxis;
     private string xButton;
 
-    [SerializeField]
-    private Camera playerOneCamera;
+    /// <summary>
+    /// This class focuses on player controls and actions
+    /// </summary>
 
-    [SerializeField]
-    private Camera playerTwoCamera;
+    public PlayerControlsSO playerControls;
 
-    [SerializeField]
-    private Camera playerThreeCamera;
+    public UnityEvent onDamage;
 
-    [SerializeField]
-    private Camera playerFourCamera;
+    private int timeLightPunch;
 
-    [SerializeField]
-    private Transform player1;
+    private int timeHeavyPunch;
 
-    [SerializeField]
-    private Transform player2;
+    private int timeKick;
 
-    [SerializeField]
-    private Transform player3;
+    private bool lightPunchTrigger;
 
-    [SerializeField]
-    private Transform player4;
+    private bool heavyPunchTrigger;
 
-    [SerializeField]
-    private Transform playerRagdoll;
+    private bool kickTrigger;
 
-    [SerializeField]
-    private Transform playerTwoRagdoll;
+    private bool blockTrigger;
 
-    [SerializeField]
-    private Transform playerThreeRagdoll;
+    private bool takePunchTrigger;
 
-    [SerializeField]
-    private Transform playerFourRagdoll;
-
-    [SerializeField]
-    private Collider playerFistCollider;
-
-    private int collisionCount = 0;
-
-    private bool lightPunchTrigger1;
-    private bool lightPunchTrigger2;
-
-    private bool heavyPunchTrigger1;
-    private bool heavyPunchTrigger2;
-
-    private bool takePunch1;
-    private bool takePunch2;
-
-    private int hitCount = 0;
+    private bool isDead = false;
 
     private Transform newObject;
 
-
     // Use this for initialization
     void Start () {
+        agent = GetComponent<NavMeshAgent>();
+        agent.updateRotation = false;
         anim = GetComponent<Animator>();
-
-        // MOVE TO LOBBY AT SOME POINT
-
-        //if (Input.GetButton("Joy1_Start"))
-        //{
-
-        //}
-        //else if (Input.GetButton("Joy2_Start"))
-        //{
-
-        //}
-        //else if (Input.GetButton("Joy3_Start"))
-        //{
-
-        //}
-        //else if (Input.GetButton("Joy4_Start"))
-        //{
-
-        //}
+        playerControls.health = 500;
     }
 	
 	// Update is called once per frame
 	void Update () {
-        //Horizontal Values
-        var joyHor1 = Input.GetAxis("Joy1_Horizontal") * Time.deltaTime * 50.0f;
-        var joyHor2 = Input.GetAxis("Joy2_Horizontal") * Time.deltaTime * 50.0f;
-        var joyHor3 = Input.GetAxis("Joy3_Horizontal") * Time.deltaTime * 50.0f;
-        var joyHor4 = Input.GetAxis("Joy4_Horizontal") * Time.deltaTime * 50.0f;
+        //Horizontal Value
+        var joyHor = Input.GetAxis(playerControls.horizontal) * Time.deltaTime * 150.0f;
 
-        //Vertical Values
-        var joyVert1 = Input.GetAxis("Joy1_Vertical") * Time.deltaTime * -5.0f;
-        var joyVert2 = Input.GetAxis("Joy2_Vertical") * Time.deltaTime * -5.0f;
-        var joyVert3 = Input.GetAxis("Joy3_Vertical") * Time.deltaTime * -5.0f;
-        var joyVert4 = Input.GetAxis("Joy4_Vertical") * Time.deltaTime * -5.0f;
+        //Vertical Value
+        var joyVert = Input.GetAxis(playerControls.vertical) * Time.deltaTime * -20.0f;
 
-        //Camera Rotation Horizontal
-        var joyCamHor1 = Input.GetAxis("Joy1_CameraRotateHor") * Time.deltaTime * 7.0f;
-        var joyCamHor2 = Input.GetAxis("Joy2_CameraRotateHor") * Time.deltaTime * 7.0f;
-        var joyCamHor3 = Input.GetAxis("Joy3_CameraRotateHor") * Time.deltaTime * 7.0f;
-        var joyCamHor4 = Input.GetAxis("Joy4_CameraRotateHor") * Time.deltaTime * 7.0f;
+        var joyCamHor = Input.GetAxis(playerControls.camHor) * Time.deltaTime * 170.0f;
 
-        //Camera Rotation Vertical
-        var joyCamVert1 = Input.GetAxis("Joy1_CameraRotateVert");
-        var joyCamVert2 = Input.GetAxis("Joy2_CameraRotateVert");
-        var joyCamVert3 = Input.GetAxis("Joy3_CameraRotateVert");
-        var joyCamVert4 = Input.GetAxis("Joy4_CameraRotateVert");
+        transform.Rotate(0, joyCamHor, 0);
+        transform.Rotate(0, joyHor, 0);
+        transform.Translate(0, 0, joyVert);
 
+        Vector3 move = new Vector3(joyHor, 0, -joyVert);
+          
+        anim.SetFloat("Speed", joyVert);
 
-        player1.Rotate(0, joyHor1, 0);
-        player1.Translate(0, 0, joyVert1);
-
-        playerOneCamera.transform.LookAt(player1);
-        playerOneCamera.transform.Rotate(-15, 0, 0);
-        playerOneCamera.transform.Translate(Vector3.right * joyCamHor1);
-
-        player2.Rotate(0, joyHor2, 0);
-        player2.Translate(0, 0, joyVert2);
-
-        playerTwoCamera.transform.LookAt(player2);
-        playerTwoCamera.transform.Rotate(-15, 0, 0);
-        playerTwoCamera.transform.Translate(Vector3.right * joyCamHor2);
-
-        player3.Rotate(0, joyHor3, 0);
-        player3.Translate(0, 0, joyVert3);
-
-        playerThreeCamera.transform.LookAt(player3);
-        playerThreeCamera.transform.Rotate(-15, 0, 0);
-        playerThreeCamera.transform.Translate(Vector3.right * joyCamHor3);
-
-        player4.Rotate(0, joyHor4, 0);
-        player4.Translate(0, 0, joyVert4);
-
-        playerFourCamera.transform.LookAt(player4);
-        playerFourCamera.transform.Rotate(-15, 0, 0);
-        playerFourCamera.transform.Translate(Vector3.right * joyCamHor4);
-
-        anim.SetFloat("Speed1", joyVert1);
-        anim.SetFloat("Speed2", joyVert2);
-        anim.SetFloat("Speed3", joyVert3);
-        anim.SetFloat("Speed4", joyVert4);
-
-
-        //Make into a switch? (Can't be done!)
         //Light Punches
-        if (Input.GetKeyDown(KeyCode.Joystick1Button2))
-        {
-            lightPunchTrigger1 = true;
-        }
-        else if (Input.GetKeyDown(KeyCode.Joystick2Button2))
-        {
-            lightPunchTrigger2 = true;
-        }
-        else
-        {
-            lightPunchTrigger1 = false;
-            lightPunchTrigger2 = false;
-        }
 
-        anim.SetBool("LightPunch", lightPunchTrigger1);
-        anim.SetBool("LightPunch2", lightPunchTrigger2);
-
-        //Heavy Punches
-        if (Input.GetKeyDown(KeyCode.Joystick1Button3))
+        //Mathf.Clamp(timePunch, 0, 2);
+        if (Input.GetKeyDown(playerControls.lightPunch))
         {
-            heavyPunchTrigger1 = true;
-        }
-        else if (Input.GetKeyDown(KeyCode.Joystick2Button3))
-        {
-            heavyPunchTrigger2 = true;
-        }
-        else
-        {
-            heavyPunchTrigger1 = false;
-            heavyPunchTrigger2 = false;
-        }
-
-        anim.SetBool("HeavyPunch", heavyPunchTrigger1);
-        anim.SetBool("HeavyPunch2", heavyPunchTrigger2);
-
-    }
-
-    public void OnTriggerEnter(Collider objectCollision)
-    {
-        Debug.Log("Collided " + collisionCount + " times!");
-        if (objectCollision.gameObject.CompareTag("Team 2") && collisionCount == 3)
-        {
-            newObject = (Transform)PrefabUtility.InstantiatePrefab(playerTwoRagdoll);
-            newObject.transform.position = objectCollision.transform.position;
-            newObject.transform.rotation = objectCollision.transform.rotation;
-
-            for (int i = objectCollision.transform.childCount - 1; i >= 0; --i)
+            lightPunchTrigger = true;
+            switch (timeLightPunch)
             {
-                Transform child = objectCollision.transform.GetChild(i);
-                Quaternion newRot = new Quaternion(90, newObject.transform.rotation.y, newObject.transform.rotation.z, 0);
-                //Debug.Log("moving object: " + child.name);
-                child.SetParent(newObject.transform, false);
-
-                string childName = child.gameObject.name;
-
-                switch (childName)
-                {
-                    case "2nd Player Camera":
-                        child.transform.position = new Vector3(newObject.transform.position.x, 10,newObject.transform.position.z);
-                        child.transform.rotation = Quaternion.Lerp(child.transform.rotation, newRot, Time.deltaTime * 0.5f);
-                        break;
-                    case "Cube":
-                        child.gameObject.SetActive(false);
-                        break;
-                    case "Player 2 Circle":
-                        child.gameObject.SetActive(false);
-                        break;
-
-                    default:
-                        //child.transform.position = newObject.transform.position;
-                        //child.transform.rotation = newObject.transform.rotation;
-                        break;
-                }
+                case 0:
+                    anim.SetBool("LightPunch1", lightPunchTrigger);
+                    timeLightPunch++;
+                    break;
+                case 1:
+                    anim.SetBool("LightPunch2", lightPunchTrigger);
+                    timeLightPunch++;
+                    break;
+                case 2:
+                    anim.SetBool("LightPunch3", lightPunchTrigger);
+                    timeLightPunch++;
+                    break;
+                default:
+                    anim.SetBool("LightPunch", false);
+                    anim.SetBool("LightPunch2", false);
+                    anim.SetBool("LightPunch3", false);
+                    timeLightPunch = 0;
+                    break;
             }
-
-
-            objectCollision.gameObject.SetActive(false);
         }
-        else if(objectCollision.gameObject.CompareTag("Team 2") && collisionCount < 3)
+        if (Input.GetKeyDown(playerControls.heavyPunch))
         {
-            //anim.SetBool("TakePunch", takePunch1);
-            anim.SetBool("TakePunch2", takePunch2);
-            collisionCount++;
+            heavyPunchTrigger = true;
+            switch (timeHeavyPunch)
+            {
+                case 0:
+                    anim.SetBool("HeavyPunch1", heavyPunchTrigger);
+                    timeHeavyPunch++;
+                    break;
+                case 1:
+                    anim.SetBool("HeavyPunch2", heavyPunchTrigger);
+                    timeHeavyPunch++;
+                    break;
+                //case 2:
+                //    anim.SetBool("HeavyPunch3", heavyPunchTrigger);
+                //    timeHeavyPunch++;
+                //    break;
+                default:
+                    anim.SetBool("HeavyPunch1", false);
+                    anim.SetBool("HeavyPunch2", false);
+                    anim.SetBool("HeavyPunch3", false);
+                    timeHeavyPunch = 0;
+                    break;
+            }
         }
+        if (Input.GetKeyDown(playerControls.kick))
+        {
+            kickTrigger = true;
+            switch (timeKick)
+            {
+                case 0:
+                    anim.SetBool("Kick1", kickTrigger);
+                    timeKick++;
+                    break;
+                case 1:
+                    anim.SetBool("Kick2", kickTrigger);
+                    timeKick++;
+                    break;
+                //case 2:
+                //    anim.SetBool("HeavyPunch3", heavyPunchTrigger);
+                //    timeHeavyPunch++;
+                //    break;
+                default:
+                    anim.SetBool("Kick1", false);
+                    anim.SetBool("Kick2", false);
+                    timeKick = 0;
+                    break;
+            }
+        }
+        for (int i = 0; i <= 3; i++)
+        {
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Light Punch " + i))
+            {
+                anim.SetBool("LightPunch" + i, false);
+            }
+            else if (anim.GetCurrentAnimatorStateInfo(0).IsName("Heavy Punch " + i))
+            {
+                anim.SetBool("HeavyPunch" + i, false);
+            }
+            else if (anim.GetCurrentAnimatorStateInfo(0).IsName("Kick " + i))
+            {
+                anim.SetBool("Kick" + i, false);
+            }
+        }
+
+        //Debug.Log(timeLightPunch);
+
+        //Blocking
+        if (Input.GetKey(playerControls.blocking))
+        {
+            blockTrigger = true;
+        }
+        else
+        {
+            blockTrigger = false;
+        }
+        anim.SetBool("Blocking", blockTrigger);
+
+        anim.SetBool("TakePunch", takePunchTrigger);
     }
 
     public void punchCheck(int hitCount)
     {
-        if (hitCount == 1)
+        Collider[] attackCollider = GetComponentsInChildren<Collider>();
+        for(int i = 0; i < attackCollider.Length; i++)
         {
-            playerFistCollider.enabled = true;  
+            if (hitCount == 1 && attackCollider[i].gameObject.tag == "DamageObj")
+            {
+                attackCollider[i].GetComponent<Collider>().enabled = true;
+            }
+            else if (hitCount == 0)
+            {
+                attackCollider[i].GetComponent<Collider>().enabled = false;
+            }
         }
-        else if (hitCount == 0)
+    }
+
+    public void kickCheck(int hitCount)
+    {
+        Collider[] attackCollider = GetComponentsInChildren<Collider>();
+        for (int i = 0; i < attackCollider.Length; i++)
         {
-            playerFistCollider.enabled = false;
+            if (hitCount == 1 && attackCollider[i].gameObject.tag == "DamageObj")
+            {
+                attackCollider[i].GetComponent<Collider>().enabled = true;
+            }
+            else if (hitCount == 0)
+            {
+                attackCollider[i].GetComponent<Collider>().enabled = false;
+            }
+        }
+    }
+
+    public void AlertObservers(string message)
+    {
+        if (message == "Animation Ended")
+        {
+            takePunchTrigger = false;
+        }
+
+    }
+
+    public float playerHealth(float playerHealth)
+    {
+        //playerHealth = playerOneCurrentHealth;
+        return playerHealth;
+    }
+
+    public void TakeDamage(int damage)
+    {
+        print("hit " + transform + " for " + damage);
+        if (playerControls.health == 0 && !isDead)
+        {
+            isDead = true;
+            //takePunch = false;
+            newObject = (Transform)PrefabUtility.InstantiatePrefab(playerControls.playerRagdoll);
+            newObject.transform.position = transform.position;
+            newObject.transform.rotation = transform.rotation;
+            gameObject.SetActive(false);
+        }
+        else
+        {
+            takePunchTrigger = true;
+            playerControls.health = playerControls.health - damage;
+            onDamage.Invoke();
         }
     }
 }

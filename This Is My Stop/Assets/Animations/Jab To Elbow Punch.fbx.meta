@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 6d76a77b76e18e74e890e935c7bed067
-timeCreated: 1519950926
+guid: 0dc97e2a5ee51ef46aec5fb1fe42dc71
+timeCreated: 1521905851
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
@@ -127,7 +127,7 @@ ModelImporter:
       name: mixamo.com
       takeName: mixamo.com
       firstFrame: 0
-      lastFrame: 65
+      lastFrame: 88
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -147,14 +147,28 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.5322272
+      - time: 0.25797954
         functionName: punchCheck
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 1
         messageOptions: 0
-      - time: 0.6168036
+      - time: 0.30083668
+        functionName: punchCheck
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.61967015
+        functionName: punchCheck
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 1
+        messageOptions: 0
+      - time: 0.68441916
         functionName: punchCheck
         data: 
         objectReferenceParameter: {instanceID: 0}

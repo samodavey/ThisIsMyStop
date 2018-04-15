@@ -24,6 +24,7 @@ public class HealthBar : MonoBehaviour {
     {
         float barHealth = playerControls.health;
         content.fillAmount = Map(barHealth, 0,500,0,1);
+        
     }
 
     private float Map(float val, float inMin, float inMax, float outMin, float outMax)

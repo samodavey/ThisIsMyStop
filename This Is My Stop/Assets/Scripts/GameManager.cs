@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : MonoBehaviour
+{
 
     //public string[] tagArray;
 
     //private GameObject[] taggedTeams;
+
+    [SerializeField]
+    private Transform exitPoint;
+
 
     private GameObject[] randomTag = new GameObject[3];
 
@@ -17,7 +22,8 @@ public class GameManager : MonoBehaviour {
     private int targetDestroyed;
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         //Maybe make an GameObject Array?
         GameObject[] team1Chars = GameObject.FindGameObjectsWithTag("Team 1");
         GameObject[] team2Chars = GameObject.FindGameObjectsWithTag("Team 2");
@@ -25,7 +31,7 @@ public class GameManager : MonoBehaviour {
         GameObject[] team4Chars = GameObject.FindGameObjectsWithTag("Team 4");
 
         //Maybe knock it down to one for loop?
-        for(int i = 0; i < team1Chars.Length; i++)
+        for (int i = 0; i < team1Chars.Length; i++)
         {
             taggedTeams.Add(team1Chars[i].gameObject);
         }
@@ -54,12 +60,13 @@ public class GameManager : MonoBehaviour {
         }
         //Debug.Log(teamToHunt);
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         //NEED TO GIVE THE AI SOME HEALTH!
         //MAKE THE HEALTH RINGS
-        for(int i = 0; i < teamToHunt.Capacity; i++)
+        for (int i = 0; i < teamToHunt.Capacity; i++)
         {
             if (teamToHunt[i].activeSelf == false)
             {
@@ -67,9 +74,11 @@ public class GameManager : MonoBehaviour {
             }
         }
 
-        if(targetDestroyed == teamToHunt.Capacity)
+        if (targetDestroyed == teamToHunt.Capacity)
         {
             //Load victory screen for player that killed the last team member
+            Debug.Log("");
+
         }
 
         //If that team makes it to the exit then they win!

@@ -229,7 +229,7 @@ public class PlayerController : MonoBehaviour {
 
     public void TakeDamage(int damage)
     {
-        print("hit " + transform + " for " + damage);
+        //print("hit " + transform + " for " + damage);
         if (playerControls.health == 0 && !isDead)
         {
             isDead = true;
@@ -242,7 +242,7 @@ public class PlayerController : MonoBehaviour {
         else
         {
             takePunchTrigger = true;
-            playerControls.health = playerControls.health - damage;
+            playerControls.health -= damage;
             onDamage.Invoke();
         }
     }

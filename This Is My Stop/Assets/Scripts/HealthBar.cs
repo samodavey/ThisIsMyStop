@@ -1,33 +1,33 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour {
 
-    [SerializeField]
-    private Image content;
+    private Renderer renderer;
 
     public PlayerControlsSO playerControls;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
+    private float playerHealthVal;
+
+    // Use this for initialization
+    void Start () {
+        renderer = GetComponent<Renderer>();
+    }
 	
 	// Update is called once per frame
 	void Update () {
+        playerHealthVal = 1 - ((float)playerControls.health / 500);
+        //Debug.Log(value);
         HandleBar();
     }
 
     public void HandleBar()
     {
-        float barHealth = playerControls.health;
-        content.fillAmount = Map(barHealth, 0,500,0,1);
-    }
-
-    private float Map(float val, float inMin, float inMax, float outMin, float outMax)
-    {
-        return (val - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+        if(renderer == null)
+        {
+            renderer = GetComponent<Renderer>();
+        }
+        renderer.material.SetFloat("_Cutoff", playerHealthVal);
     }
 }

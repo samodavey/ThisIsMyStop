@@ -20,7 +20,6 @@ public class AIHealth : MonoBehaviour {
     void Update()
     {
         aiHealthVal = 1 - ((float)AIControls.health / 250);
-        //Debug.Log(value);
         HandleBar();
     }
 

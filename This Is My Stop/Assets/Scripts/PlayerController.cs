@@ -200,7 +200,7 @@ public class PlayerController : MonoBehaviour {
         Collider[] attackCollider = GetComponentsInChildren<Collider>();
         for (int i = 0; i < attackCollider.Length; i++)
         {
-            if (hitCount == 1 && attackCollider[i].gameObject.tag == "DamageObj")
+            if (hitCount == 1 && attackCollider[i].gameObject.tag == "KickDamageObj")
             {
                 attackCollider[i].GetComponent<Collider>().enabled = true;
             }

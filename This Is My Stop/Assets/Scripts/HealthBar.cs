@@ -18,7 +18,6 @@ public class HealthBar : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         playerHealthVal = 1 - ((float)playerControls.health / 500);
-        //Debug.Log(value);
         HandleBar();
     }
 

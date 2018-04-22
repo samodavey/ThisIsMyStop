@@ -151,16 +151,23 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.5757374
+      - time: 0.51344234
         functionName: punchCheck
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 1
         messageOptions: 0
-      - time: 0.65697676
+      - time: 0.60451776
         functionName: punchCheck
         data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.99703264
+        functionName: AlertObservers
+        data: LightPunch2
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0

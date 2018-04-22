@@ -8,8 +8,11 @@ using UnityEngine.Events;
 
 public class BasicAI : MonoBehaviour {
 
-    public Transform target;
+    [SerializeField]
+    private Transform target;
+
     public AIControlsSO AIControls;
+
     public UnityEvent onDamage;
 
     private bool hasLookedAt;
@@ -20,15 +23,21 @@ public class BasicAI : MonoBehaviour {
 
     private Transform newObject;
 
-    private float speed = 5;
+    private float speed = 3;
 
     private bool takePunchTrigger;
 
     private bool isDead = false;
 
+    private bool newTarget = false;
+
+    private float timeUntilNextAttack = 0;
+
     private NavMeshAgent agent;
 
     private List<GameObject> taggedTeams = new List<GameObject>();
+
+
 
     // Use this for initialization
     void Start () {
@@ -93,7 +102,11 @@ public class BasicAI : MonoBehaviour {
         {
             if (character.tag != this.gameObject.tag)
             {
+                //List<Transform> targetedChar = new List<Transform>();
+
                 float distance = Vector3.Distance(character.transform.position, this.transform.position);
+
+                //targetedChar.Add(target);
 
                 //Can't be done because of Monobehaviour to ScriptableObject issue
 
@@ -109,32 +122,53 @@ public class BasicAI : MonoBehaviour {
                 //{
                 //    target.position = new Vector3(character.transform.position.x, character.transform.position.y, character.transform.position.z);
                 //}
+                    if (distance <= 8)
+                    {
+                        timeUntilNextAttack += Time.deltaTime;
 
-                if (distance <= 8)
-                {
+                            if (newTarget == false || timeUntilNextAttack >= 2 && target.hasChanged)
+                            {
+
+                                //target.gameObject.transform.position = character.transform.position;
+
+                                target = character.transform;
+                                
+                                //target.position = new Vector3(character.transform.position.x, character.transform.position.y, character.transform.position.z - 3);
+
+                                this.gameObject.transform.LookAt(character.transform);
+
+                                newTarget = true;
+
+                                aiAnim.SetBool(chosenAttack, true);
+                                timeUntilNextAttack = 0;
+
+                            }
+                    }
+
+                    //Search for a new enemy
+                    if (target.gameObject.activeSelf == false)
+                    {
+                        newTarget = false;
+                        aiAnim.SetBool(chosenAttack, false);
+
+                        if(character.tag == this.gameObject.tag)
+                        {
+                            target = character.transform;
+                        }
+                    
+                    }
 
                     //Run away if health is low
                     if (AIControls.health <= 100)
                     {
-
+                        aiAnim.SetBool("Blocking", true);
                     }
-                    else
-                    {
-                        target.position = new Vector3(character.transform.position.x, character.transform.position.y, character.transform.position.z);
-                        aiAnim.SetBool(chosenAttack, true);
-                        //If animation has finished
-                    }
-                }
             }
-        }
-
-        if (aiAnim.GetCurrentAnimatorStateInfo(0).IsName(chosenAttack))
-        {
-            aiAnim.SetBool(chosenAttack, false);
         }
 
         aiAnim.SetBool("TakePunch", takePunchTrigger);
     }
+
 
     public void punchCheck(int hitCount)
     {
@@ -148,6 +182,12 @@ public class BasicAI : MonoBehaviour {
             else if (hitCount == 0)
             {
                 attackCollider[i].GetComponent<Collider>().enabled = false;
+            }
+
+            //To prevent hit point boxes getting turned off
+            if (attackCollider[i].gameObject.tag == "HitPoint")
+            {
+                attackCollider[i].GetComponent<Collider>().enabled = true;
             }
         }
     }
@@ -165,6 +205,12 @@ public class BasicAI : MonoBehaviour {
             {
                 attackCollider[i].GetComponent<Collider>().enabled = false;
             }
+
+            //To prevent hit point boxes getting turned off
+            if (attackCollider[i].gameObject.tag == "HitPoint")
+            {
+                attackCollider[i].GetComponent<Collider>().enabled = true;
+            }
         }
     }
 
@@ -177,7 +223,7 @@ public class BasicAI : MonoBehaviour {
     public void TakeDamage(int damage)
     {
         //print("hit " + transform + " for " + damage);
-        if (AIControls.health == 0 && !isDead)
+        if (AIControls.health <= 0 && !isDead)
         {
             isDead = true;
             //takePunch = false;
@@ -194,13 +240,10 @@ public class BasicAI : MonoBehaviour {
         }
     }
 
-    public void AlertObservers(string message)
+    public void AlertObservers(string attackName)
     {
-        if (message == "Animation Ended")
-        {
-            takePunchTrigger = false;
-        }
-
+        aiAnim.SetBool(attackName, false);
+        takePunchTrigger = false;
     }
 
     private void randomizeLookAt()
@@ -208,4 +251,5 @@ public class BasicAI : MonoBehaviour {
         hasLookedAt = true;
         randomDir = new Vector3(Random.Range(-150.0f, 150.0f), 0, Random.Range(-150.0f, 150.0f));
     }
+
 }

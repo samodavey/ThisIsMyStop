@@ -192,6 +192,12 @@ public class PlayerController : MonoBehaviour {
             {
                 attackCollider[i].GetComponent<Collider>().enabled = false;
             }
+
+            //To prevent hit point boxes getting turned off
+            if (attackCollider[i].gameObject.tag == "HitPoint")
+            {
+                attackCollider[i].GetComponent<Collider>().enabled = true;
+            }
         }
     }
 
@@ -208,12 +214,18 @@ public class PlayerController : MonoBehaviour {
             {
                 attackCollider[i].GetComponent<Collider>().enabled = false;
             }
+
+            //To prevent hit point boxes getting turned off
+            if (attackCollider[i].gameObject.tag == "HitPoint")
+            {
+                attackCollider[i].GetComponent<Collider>().enabled = true;
+            }
         }
     }
 
     public void AlertObservers(string message)
     {
-        if (message == "Animation Ended")
+        if (message == "TakePunch")
         {
             takePunchTrigger = false;
         }
@@ -229,7 +241,7 @@ public class PlayerController : MonoBehaviour {
     public void TakeDamage(int damage)
     {
         //print("hit " + transform + " for " + damage);
-        if (playerControls.health == 0 && !isDead)
+        if (playerControls.health <= 0 && !isDead)
         {
             isDead = true;
             //takePunch = false;

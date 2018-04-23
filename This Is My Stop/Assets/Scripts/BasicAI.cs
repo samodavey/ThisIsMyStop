@@ -67,7 +67,9 @@ public class BasicAI : MonoBehaviour {
             taggedTeams.Add(team4Chars[i].gameObject);
         }
     }
-	
+
+
+    GameObject characterTemp = null;
 	// Update is called once per frame
 	void Update () {
 
@@ -129,13 +131,17 @@ public class BasicAI : MonoBehaviour {
                             if (newTarget == false || timeUntilNextAttack >= 2 && target.hasChanged)
                             {
 
-                                //target.gameObject.transform.position = character.transform.position;
+                        //target.gameObject.transform.position = character.transform.position;
 
-                                target = character.transform;
-                                
+                        //target = character.transform;
+
+                                if (!IsInvoking("SelectTarget"))
+                                {
+                                    characterTemp = character;
+                                    Invoke("SelectTarget", 5);
+                                }
+
                                 //target.position = new Vector3(character.transform.position.x, character.transform.position.y, character.transform.position.z - 3);
-
-                                this.gameObject.transform.LookAt(character.transform);
 
                                 newTarget = true;
 
@@ -169,6 +175,13 @@ public class BasicAI : MonoBehaviour {
         aiAnim.SetBool("TakePunch", takePunchTrigger);
     }
 
+
+    void SelectTarget()
+    {
+        target = characterTemp.transform;
+        this.gameObject.transform.LookAt(characterTemp.transform);
+
+    }
 
     public void punchCheck(int hitCount)
     {

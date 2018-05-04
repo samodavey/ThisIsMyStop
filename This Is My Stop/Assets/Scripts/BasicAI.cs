@@ -134,7 +134,7 @@ public class BasicAI : MonoBehaviour {
                         //target.gameObject.transform.position = character.transform.position;
 
                         //target = character.transform;
-
+                                //INVOKING IS GREAT!
                                 if (!IsInvoking("SelectTarget"))
                                 {
                                     characterTemp = character;

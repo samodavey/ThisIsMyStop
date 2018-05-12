@@ -131,9 +131,9 @@ public class BasicAI : MonoBehaviour {
                             if (newTarget == false || timeUntilNextAttack >= 2 && target.hasChanged)
                             {
 
-                        //target.gameObject.transform.position = character.transform.position;
+                                //target.gameObject.transform.position = character.transform.position;
 
-                        //target = character.transform;
+                                //target = character.transform;
                                 //INVOKING IS GREAT!
                                 if (!IsInvoking("SelectTarget"))
                                 {

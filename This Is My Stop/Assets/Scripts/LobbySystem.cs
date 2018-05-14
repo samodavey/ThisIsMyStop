@@ -126,7 +126,7 @@ public class LobbySystem : MonoBehaviour {
                 {
                     int arrayAdjustment = i + 1;
                     playerToDeactivate = GameObject.Find("Player " + arrayAdjustment);
-                    for(int y = 1; y < 3; y++)
+                    for(int y = 1; y < 4; y++)
                     {
                         AIToDeactivate = GameObject.Find("Team " + arrayAdjustment + " Gang Member " + y);
                         AIToDeactivate.SetActive(false);

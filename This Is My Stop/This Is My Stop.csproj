@@ -336,8 +336,10 @@
     <Compile Include="Assets\ProCore\ProGrids\MonoBehaviour\pg_IgnoreSnap.cs" />
     <Compile Include="Assets\Scripts\AIControlsSO.cs" />
     <Compile Include="Assets\Scripts\AIHealth.cs" />
+    <Compile Include="Assets\Scripts\ArrowDirection.cs" />
     <Compile Include="Assets\Scripts\BasicAI.cs" />
     <Compile Include="Assets\Scripts\ControllerAssignment.cs" />
+    <Compile Include="Assets\Scripts\ExitPointTrigger.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\HealthBar.cs" />
     <Compile Include="Assets\Scripts\HitEventTrigger.cs" />

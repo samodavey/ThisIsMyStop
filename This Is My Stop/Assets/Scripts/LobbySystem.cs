@@ -143,7 +143,7 @@ public class LobbySystem : MonoBehaviour {
                     {
                         case 2:
 
-                            //Array system is weird
+                            //Array system gathers cameras in a bizarre order
                             cameraArray[0].rect = new Rect(new Vector2(0, 0.5f), new Vector2(1, 0.5f));
                             cameraArray[3].rect = new Rect(new Vector2(0, 0), new Vector2(1, 0.5f));
                             adjustSceneCameras = false;

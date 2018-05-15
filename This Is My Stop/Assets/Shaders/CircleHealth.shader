@@ -33,10 +33,7 @@
 			// Use shader model 3.0 target, to get nicer looking lighting
 			//#pragma target 3.0
 
-			//sampler2D _MainTex;
-
 			struct AppData {
-		//float2 uv_MainTex;
 		float4 vertex : POSITION;
 		float2 uv : TEXCOORD0;
 	};
@@ -46,8 +43,6 @@
 		float2 uv1 : TEXCOORD1;
 		float4 vertex : SV_POSITION;
 	};
-
-	//fixed4 _Color;
 
 	float4 _MainTex_TexelSize;
 	VtoF vert(AppData i) {

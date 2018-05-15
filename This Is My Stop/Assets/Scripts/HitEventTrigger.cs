@@ -21,12 +21,12 @@ public class HitEventTrigger : MonoBehaviour
     void OnTriggerEnter (Collider other)
     {
         Animator anim = GetComponentInParent<Animator>();
-        if (other.tag == "DamageObj" && !anim.GetCurrentAnimatorStateInfo(0).IsName("Blocking"))
+        if (other.tag == "DamageObj" || other.tag == "KickDamageObj" && !anim.GetCurrentAnimatorStateInfo(0).IsName("Blocking"))
         {
             //other.SendMessage("TakeDamage", 10, SendMessageOptions.DontRequireReceiver);
             onHit.Invoke();
         }
-        else if(other.tag == "DamageObj" && anim.GetCurrentAnimatorStateInfo(0).IsName("Blocking"))
+        else if(other.tag == "DamageObj" || other.tag == "KickDamageObj" && anim.GetCurrentAnimatorStateInfo(0).IsName("Blocking"))
         {
             //anim.SetBool("Blocking", false);
             anim.SetBool("BlockReact", true);

@@ -56,16 +56,29 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         //Horizontal Value
-        var joyHor = Input.GetAxis(playerControls.horizontal) * Time.deltaTime * 150.0f;
+        var joyHor = Input.GetAxis(playerControls.horizontal) * Time.deltaTime * 350.0f;
 
         //Vertical Value
         var joyVert = Input.GetAxis(playerControls.vertical) * Time.deltaTime * -20.0f;
 
         var joyCamHor = Input.GetAxis(playerControls.camHor) * Time.deltaTime * 170.0f;
 
+
+        //Blocking
+        if (Input.GetKey(playerControls.blocking))
+        {
+            blockTrigger = true;
+        }
+        else
+        {
+            blockTrigger = false;
+            //Player cannot move forward whilst blocking
+            transform.Translate(0, 0, joyVert);
+        }
+        anim.SetBool("Blocking", blockTrigger);
+
         transform.Rotate(0, joyCamHor, 0);
         transform.Rotate(0, joyHor, 0);
-        transform.Translate(0, 0, joyVert);
 
         Vector3 move = new Vector3(joyHor, 0, -joyVert);
           
@@ -73,7 +86,6 @@ public class PlayerController : MonoBehaviour {
 
         //Light Punches
 
-        //Mathf.Clamp(timePunch, 0, 2);
         if (Input.GetKeyDown(playerControls.lightPunch))
         {
             lightPunchTrigger = true;
@@ -89,7 +101,7 @@ public class PlayerController : MonoBehaviour {
                     break;
                 case 2:
                     anim.SetBool("LightPunch3", lightPunchTrigger);
-                    timeLightPunch++;
+                    timeLightPunch = 0;
                     break;
                 default:
                     anim.SetBool("LightPunch", false);
@@ -110,7 +122,7 @@ public class PlayerController : MonoBehaviour {
                     break;
                 case 1:
                     anim.SetBool("HeavyPunch2", heavyPunchTrigger);
-                    timeHeavyPunch++;
+                    timeHeavyPunch = 0;
                     break;
                 //case 2:
                 //    anim.SetBool("HeavyPunch3", heavyPunchTrigger);
@@ -119,7 +131,7 @@ public class PlayerController : MonoBehaviour {
                 default:
                     anim.SetBool("HeavyPunch1", false);
                     anim.SetBool("HeavyPunch2", false);
-                    anim.SetBool("HeavyPunch3", false);
+                    //anim.SetBool("HeavyPunch3", false);
                     timeHeavyPunch = 0;
                     break;
             }
@@ -131,19 +143,19 @@ public class PlayerController : MonoBehaviour {
             {
                 case 0:
                     anim.SetBool("Kick1", kickTrigger);
-                    timeKick++;
+                    timeKick = 0;
                     break;
-                case 1:
-                    anim.SetBool("Kick2", kickTrigger);
-                    timeKick++;
-                    break;
+                //case 1:
+                //    anim.SetBool("Kick2", kickTrigger);
+                //    timeKick++;
+                //    break;
                 //case 2:
                 //    anim.SetBool("HeavyPunch3", heavyPunchTrigger);
                 //    timeHeavyPunch++;
                 //    break;
                 default:
                     anim.SetBool("Kick1", false);
-                    anim.SetBool("Kick2", false);
+                    //anim.SetBool("Kick2", false);
                     timeKick = 0;
                     break;
             }
@@ -164,19 +176,6 @@ public class PlayerController : MonoBehaviour {
             }
         }
 
-        //Debug.Log(timeLightPunch);
-
-        //Blocking
-        if (Input.GetKey(playerControls.blocking))
-        {
-            blockTrigger = true;
-        }
-        else
-        {
-            blockTrigger = false;
-        }
-        anim.SetBool("Blocking", blockTrigger);
-
         anim.SetBool("TakePunch", takePunchTrigger);
     }
 
@@ -193,6 +192,12 @@ public class PlayerController : MonoBehaviour {
             {
                 attackCollider[i].GetComponent<Collider>().enabled = false;
             }
+
+            //To prevent hit point boxes getting turned off
+            if (attackCollider[i].gameObject.tag == "HitPoint")
+            {
+                attackCollider[i].GetComponent<Collider>().enabled = true;
+            }
         }
     }
 
@@ -201,7 +206,7 @@ public class PlayerController : MonoBehaviour {
         Collider[] attackCollider = GetComponentsInChildren<Collider>();
         for (int i = 0; i < attackCollider.Length; i++)
         {
-            if (hitCount == 1 && attackCollider[i].gameObject.tag == "DamageObj")
+            if (hitCount == 1 && attackCollider[i].gameObject.tag == "KickDamageObj")
             {
                 attackCollider[i].GetComponent<Collider>().enabled = true;
             }
@@ -209,12 +214,18 @@ public class PlayerController : MonoBehaviour {
             {
                 attackCollider[i].GetComponent<Collider>().enabled = false;
             }
+
+            //To prevent hit point boxes getting turned off
+            if (attackCollider[i].gameObject.tag == "HitPoint")
+            {
+                attackCollider[i].GetComponent<Collider>().enabled = true;
+            }
         }
     }
 
     public void AlertObservers(string message)
     {
-        if (message == "Animation Ended")
+        if (message == "TakePunch")
         {
             takePunchTrigger = false;
         }
@@ -230,7 +241,7 @@ public class PlayerController : MonoBehaviour {
     public void TakeDamage(int damage)
     {
         //print("hit " + transform + " for " + damage);
-        if (playerControls.health == 0 && !isDead)
+        if (playerControls.health <= 0 && !isDead)
         {
             isDead = true;
             //takePunch = false;

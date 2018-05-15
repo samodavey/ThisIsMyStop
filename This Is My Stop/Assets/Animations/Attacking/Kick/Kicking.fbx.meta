@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 6d76a77b76e18e74e890e935c7bed067
-timeCreated: 1519950926
+guid: 22654a5458a8bd74e90ff931eaf76e4a
+timeCreated: 1524098771
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
@@ -127,7 +127,7 @@ ModelImporter:
       name: mixamo.com
       takeName: mixamo.com
       firstFrame: 0
-      lastFrame: 65
+      lastFrame: 58
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -147,16 +147,23 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.5322272
-        functionName: punchCheck
+      - time: 0.446984
+        functionName: kickCheck
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 1
         messageOptions: 0
-      - time: 0.6168036
-        functionName: punchCheck
+      - time: 0.49851632
+        functionName: kickCheck
         data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.9792285
+        functionName: AlertObservers
+        data: Kick1
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0

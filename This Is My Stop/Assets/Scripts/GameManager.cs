@@ -37,6 +37,9 @@ public class GameManager : MonoBehaviour
         {
             //yield return new WaitForEndOfFrame();
             //Maybe knock it down to one for loop?
+
+            //FIX THIS!
+
             for (int i = 0; i < team1Chars.Length; i++)
             {
                 if (team1Chars[i].gameObject.activeSelf)

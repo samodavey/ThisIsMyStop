@@ -30,10 +30,7 @@ public class LobbySystem : MonoBehaviour {
     private List<GameObject> panels = new List<GameObject>();
     private List<GameObject> panelItem = new List<GameObject>();
 
-    private GameObject playerToDeactivate;
-    private GameObject AIToDeactivate;
-
-    private float timeLeft = 10.0f;
+    private float timeLeft = 2.0f;
     private bool timerEnabled;
     private bool lockedIn;
     private int playerReadied = 0;
@@ -42,25 +39,27 @@ public class LobbySystem : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-
-        int childCount = canvas.transform.childCount;
-
-        for (int y = 0; y < childCount; y++)
+        if(canvas != null)
         {
-            GameObject canvasChild = canvas.transform.GetChild(y).gameObject;
-            if (canvasChild.name.Contains("Panel"))
-            {
-                panels.Add(canvasChild);
-                panelItem.Add(canvasChild.transform.GetChild(0).gameObject);
-                panelItem.Add(canvasChild.transform.GetChild(1).gameObject);
-                panelItem.Add(canvasChild.transform.GetChild(2).gameObject);
-                panelItem.Add(canvasChild.transform.GetChild(3).gameObject);
-            }
-        }
+            int childCount = canvas.transform.childCount;
 
-        //GameObject resetPanel = Instantiate(panels, new Vector3(panels[0].transform.position.x, panels[0].transform.position.y, -59.604f), Quaternion.identity);
-        //resetPanel.transform.SetParent(canvas.transform, false);
-        //resetPanel.SetActive(false);
+            for (int y = 0; y < childCount; y++)
+            {
+                GameObject canvasChild = canvas.transform.GetChild(y).gameObject;
+                if (canvasChild.name.Contains("Panel"))
+                {
+                    panels.Add(canvasChild);
+                    panelItem.Add(canvasChild.transform.GetChild(0).gameObject);
+                    panelItem.Add(canvasChild.transform.GetChild(1).gameObject);
+                    panelItem.Add(canvasChild.transform.GetChild(2).gameObject);
+                    panelItem.Add(canvasChild.transform.GetChild(3).gameObject);
+                }
+            }
+
+            //GameObject resetPanel = Instantiate(panels, new Vector3(panels[0].transform.position.x, panels[0].transform.position.y, -59.604f), Quaternion.identity);
+            //resetPanel.transform.SetParent(canvas.transform, false);
+            //resetPanel.SetActive(false);
+        }
     }
 	
 	// Update is called once per frame
@@ -119,43 +118,52 @@ public class LobbySystem : MonoBehaviour {
         {
 
             //MANAGE THE CAMERAS NICELY, REPLACE THE BACKGROUND OR ADJUST THE CAMERAS
+            //GameObject playerToDeactivate;
+            GameObject[] charactersToDeactivate;
 
-            for (int i = 1; i < playerEntered.Length; i++)
+            for (int i = 1; i <= playerEntered.Length; i++)
             {
-                if (playerEntered[i] == false)
+                int playerEnteredIndex = i - 1;
+
+                if (playerEntered[playerEnteredIndex] == false)
                 {
-                    int arrayAdjustment = i + 1;
-                    playerToDeactivate = GameObject.Find("Player " + arrayAdjustment);
-                    for(int y = 1; y < 4; y++)
+                    //int arrayAdjustment = i + 1;
+                    charactersToDeactivate = GameObject.FindGameObjectsWithTag("Team " + i);
+
+                    //for(int y = 1; y <= 3; y++)
+                    //{
+                    //    AIToDeactivate = GameObject.Find("Team " + i + " Gang Member " + y);
+                    //    AIToDeactivate.SetActive(false);
+                    //}
+                    //Debug.Log("Deactivated player " + i);
+                    for(int y = 0; y < charactersToDeactivate.Length; y++)
                     {
-                        AIToDeactivate = GameObject.Find("Team " + arrayAdjustment + " Gang Member " + y);
-                        AIToDeactivate.SetActive(false);
+                        charactersToDeactivate[y].gameObject.SetActive(false);
                     }
-                    Debug.Log("Deactivated player " + i);
-                    playerToDeactivate.SetActive(false);
+                        
                 }
 
-                if(playerEntered[i] == true && adjustSceneCameras == true)
+                if(playerEntered[playerEnteredIndex] == true && adjustSceneCameras == true)
                 {
                     Camera[] cameraArray;
+                    PlayerController[] activePlayers = FindObjectsOfType<PlayerController>();
+
                     cameraArray = FindObjectsOfType<Camera>();
                     switch (playersConnected)
                     {
                         case 2:
 
                             //Array system gathers cameras in a bizarre order
-                            cameraArray[0].rect = new Rect(new Vector2(0, 0.5f), new Vector2(1, 0.5f));
-                            cameraArray[3].rect = new Rect(new Vector2(0, 0), new Vector2(1, 0.5f));
+                            activePlayers[0].GetComponentInChildren<Camera>().rect = new Rect(new Vector2(0, 0.5f), new Vector2(1, 0.5f));
+                            activePlayers[1].GetComponentInChildren<Camera>().rect = new Rect(new Vector2(0, 0), new Vector2(1, 0.5f));
                             adjustSceneCameras = false;
                             break;
 
                         case 3:
                             //Cheating a little bit here if player 3 or 4 is selected to enter
-                            cameraArray[0].rect = new Rect(new Vector2(0, 0.5f), new Vector2(1, 0.5f));
-                            cameraArray[1].rect = new Rect(new Vector2(0.5f, 0), new Vector2(0.5f, 0.5f));
-                            cameraArray[3].rect = new Rect(new Vector2(0, 0), new Vector2(0.5f, 0.5f));
-                            cameraArray[2].rect = new Rect(new Vector2(0.5f, 0), new Vector2(0.5f, 0.5f));
-
+                            activePlayers[0].GetComponentInChildren<Camera>().rect = new Rect(new Vector2(0, 0.5f), new Vector2(1, 0.5f));
+                            activePlayers[1].GetComponentInChildren<Camera>().rect = new Rect(new Vector2(0.5f, 0), new Vector2(0.5f, 0.5f));
+                            activePlayers[2].GetComponentInChildren<Camera>().rect = new Rect(new Vector2(0, 0), new Vector2(0.5f, 0.5f));
                             adjustSceneCameras = false;
                             break;
 
@@ -165,7 +173,7 @@ public class LobbySystem : MonoBehaviour {
                     }
                 }
             }
-
+            DestroyImmediate(this.gameObject);
         }
 
     }

@@ -11,7 +11,9 @@ public class GameManager : MonoBehaviour
 
     private GameObject[] randomTag = new GameObject[3];
 
-    private List<GameObject> taggedTeams = new List<GameObject>();
+    private GameObject[][] teamsArray = new GameObject[4][];
+
+    //private GameObject[] taggedTeams = new GameObject[16];
 
     private List<GameObject> teamToHunt = new List<GameObject>();
 
@@ -29,73 +31,34 @@ public class GameManager : MonoBehaviour
         GameObject[] team2Chars = GameObject.FindGameObjectsWithTag("Team 2");
         GameObject[] team3Chars = GameObject.FindGameObjectsWithTag("Team 3");
         GameObject[] team4Chars = GameObject.FindGameObjectsWithTag("Team 4");
+        teamsArray[0] = team1Chars;
+        teamsArray[1] = team2Chars;
+        teamsArray[2] = team3Chars;
+        teamsArray[3] = team4Chars;
 
-        var randomTeamIndex = Random.Range(1, 4);
         var randomDesIndex = Random.Range(0, 4);
 
         if (initializingTeams)
         {
-            //yield return new WaitForEndOfFrame();
-            //Maybe knock it down to one for loop?
-
             //FIX THIS!
 
-            for (int i = 0; i < team1Chars.Length; i++)
-            {
-                if (team1Chars[i].gameObject.activeSelf)
-                {
-                    taggedTeams.Add(team1Chars[i].gameObject);
-                }
-            }
-            for (int i = 0; i < team2Chars.Length; i++)
-            {
-                if (team2Chars[i].gameObject.activeSelf)
-                {
-                    taggedTeams.Add(team2Chars[i].gameObject);
-                }
-            }
-            for (int i = 0; i < team3Chars.Length; i++)
-            {
-                if (team3Chars[i].gameObject.activeSelf)
-                {
-                    taggedTeams.Add(team3Chars[i].gameObject);
-                }
-            }
-            for (int i = 0; i < team4Chars.Length; i++)
-            {
-                if (team4Chars[i].gameObject.activeSelf)
-                {
-                    taggedTeams.Add(team4Chars[i].gameObject);
-                }
-            }
-
-            for (int i = 0; i < taggedTeams.Capacity; i++)
-            {
-                if (taggedTeams[i].gameObject.tag == "Team " + randomTeamIndex)
-                {
-                    teamToHunt.Add(taggedTeams[i]);
-                }
-            }
-
-            for (int y = 0; y < teamToHunt.Capacity; y++)
-            {
-                teamToHunt[y].gameObject.tag = "Hunted";
-            }
+            StartCoroutine(teamInit());
 
             //Turn on a random destination point
             exitPoints[randomDesIndex].SetActive(true);
 
-            Debug.Log("You must hunt team " + randomTeamIndex);
-            Debug.Log("Escaping team must reach train " + randomDesIndex);
+            //Debug.Log("You must hunt team " + randomTeamIndex);
+            //Debug.Log("Escaping team must reach train " + randomDesIndex);
 
             initializingTeams = false;
         }
-
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        //Debug.Log(teamsArray);
 
         for (int i = 0; i < teamToHunt.Capacity; i++)
         {
@@ -117,8 +80,34 @@ public class GameManager : MonoBehaviour
     }
 
 
-    //IEnumerator teamInit()
-    //{
+    IEnumerator teamInit()
+    {
+        yield return new WaitForSeconds(0.5f);
 
-    //}
+        int teamCount = 0;
+
+        for (int j = 0; j < 3; j++)
+        {
+            if(teamsArray[j][0].gameObject.activeSelf)
+            {
+                teamCount++;
+            }
+        }
+
+
+        var randomTeamIndex = Random.Range(1, teamCount);
+
+        //for (int i = 0; i < teamsArray.Length; i++)
+        //{
+        //    if (teamsArray[i][0].gameObject.tag == "Team " + randomTeamIndex)
+        //    {
+                for(int j = 0; j < teamsArray[randomTeamIndex].Length; j++)
+                {
+                    //teamToHunt.Add(teamsArray[i][j]);
+                    teamsArray[randomTeamIndex][j].gameObject.tag = "Hunted";
+                }
+                //break;
+          //  }
+       // }
+    }
 }

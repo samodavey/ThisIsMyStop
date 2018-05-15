@@ -14,10 +14,7 @@ public class ArrowDirection : MonoBehaviour {
         //target = GameObject.Find()
         exitTarget = GameObject.FindGameObjectWithTag("Destination").transform;
         playerTarget = GameObject.FindGameObjectsWithTag("Hunted");
-
-
-
-        Debug.Log(exitTarget.name);
+        //Debug.Log(exitTarget.name);
 	}
 	
 	// Update is called once per frame

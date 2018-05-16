@@ -86,7 +86,9 @@ public class GameManager : MonoBehaviour
 
         int teamCount = 0;
 
-        for (int j = 0; j < 3; j++)
+        int playerCount = FindObjectsOfType<PlayerController>().Length;
+
+        for (int j = 0; j < playerCount; j++)
         {
             if(teamsArray[j][0].gameObject.activeSelf)
             {

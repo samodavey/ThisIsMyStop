@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Linq;
 
 public class LobbySystem : MonoBehaviour {
 
@@ -30,12 +31,10 @@ public class LobbySystem : MonoBehaviour {
     private List<GameObject> panels = new List<GameObject>();
     private List<GameObject> panelItem = new List<GameObject>();
 
-    private float timeLeft = 10.0f;
+    private float timeLeft = 2.0f;
     private bool timerEnabled;
     private bool lockedIn;
     private int playerReadied = 0;
-
-    private bool adjustSceneCameras = true;
 
     // Use this for initialization
     void Start () {
@@ -113,14 +112,16 @@ public class LobbySystem : MonoBehaviour {
         //Debug.Log(playersConnected);
         if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("MainScene"))
         {
-
             //MANAGE THE CAMERAS NICELY, REPLACE THE BACKGROUND OR ADJUST THE CAMERAS
             //GameObject playerToDeactivate;
             GameObject[] charactersToDeactivate;
 
+            List<PlayerController> totalPlayers = new List<PlayerController>();
             for (int i = 1; i <= playerEntered.Length; i++)
             {
                 int playerEnteredIndex = i - 1;
+                PlayerController[] activePlayers = FindObjectsOfType<PlayerController>().OrderBy((x) => x.name).ToArray();
+
 
                 if (playerEntered[playerEnteredIndex] == false)
                 {
@@ -128,41 +129,38 @@ public class LobbySystem : MonoBehaviour {
 
                     for (int y = 0; y < charactersToDeactivate.Length; y++)
                     {
-                        charactersToDeactivate[y].gameObject.SetActive(false);
+                        //charactersToDeactivate[y].gameObject.SetActive(false);
+                        Destroy(charactersToDeactivate[y]);
                     }
-
                 }
-
-                if (playerEntered[playerEnteredIndex] == true && adjustSceneCameras == true)
+                else
                 {
-                    Camera[] cameraArray;
-                    PlayerController[] activePlayers = FindObjectsOfType<PlayerController>();
-
-                    cameraArray = FindObjectsOfType<Camera>();
-                    switch (playersConnected)
-                    {
-                        case 2:
-
-                            //Array system gathers cameras in a bizarre order
-                            //NEED TO HAVE IT SO ONLY THE TEAMS THAT ARE AVAILABLE ARE SELECTED
-                            activePlayers[0].GetComponentInChildren<Camera>().rect = new Rect(new Vector2(0, 0.5f), new Vector2(1, 0.5f));
-                            activePlayers[1].GetComponentInChildren<Camera>().rect = new Rect(new Vector2(0, 0), new Vector2(1, 0.5f));
-                            adjustSceneCameras = false;
-                            break;
-
-                        case 3:
-                            //Cheating a little bit here if player 3 or 4 is selected to enter
-                            activePlayers[0].GetComponentInChildren<Camera>().rect = new Rect(new Vector2(0, 0.5f), new Vector2(1, 0.5f));
-                            activePlayers[1].GetComponentInChildren<Camera>().rect = new Rect(new Vector2(0.5f, 0), new Vector2(0.5f, 0.5f));
-                            activePlayers[2].GetComponentInChildren<Camera>().rect = new Rect(new Vector2(0, 0), new Vector2(0.5f, 0.5f));
-                            adjustSceneCameras = false;
-                            break;
-
-                        default:
-                            break;
-
-                    }
+                    totalPlayers.Add(activePlayers[playerEnteredIndex]);
                 }
+
+            }
+            switch (playersConnected)
+            {
+                case 2:
+
+                    //Array system gathers cameras in a bizarre order
+                    //NEED TO HAVE IT SO ONLY THE TEAMS THAT ARE AVAILABLE ARE SELECTED
+                    totalPlayers[0].GetComponentInChildren<Camera>().rect = new Rect(new Vector2(0, 0.5f), new Vector2(1, 0.5f));
+                    totalPlayers[1].GetComponentInChildren<Camera>().rect = new Rect(new Vector2(0, 0), new Vector2(1, 0.5f));
+                    
+                    break;
+
+                case 3:
+                    //Cheating a little bit here if player 3 or 4 is selected to enter
+                    totalPlayers[0].GetComponentInChildren<Camera>().rect = new Rect(new Vector2(0, 0.5f), new Vector2(1, 0.5f));
+                    totalPlayers[1].GetComponentInChildren<Camera>().rect = new Rect(new Vector2(0.5f, 0), new Vector2(0.5f, 0.5f));
+                    totalPlayers[2].GetComponentInChildren<Camera>().rect = new Rect(new Vector2(0, 0), new Vector2(0.5f, 0.5f));
+                    
+                    break;
+
+                default:
+                    break;
+
             }
             DestroyImmediate(this.gameObject);
         }

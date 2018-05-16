@@ -100,6 +100,11 @@ public class BasicAI : MonoBehaviour {
 
         string chosenAttack = randomAttackList[Random.Range(0, randomAttackList.Count)];
 
+        if (taggedTeams.Contains(null))
+        {
+            taggedTeams.RemoveAll((x) => x == null);
+        }
+
         foreach (GameObject character in taggedTeams)
         {
             if (character.tag != this.gameObject.tag)

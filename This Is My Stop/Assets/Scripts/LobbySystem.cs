@@ -30,7 +30,7 @@ public class LobbySystem : MonoBehaviour {
     private List<GameObject> panels = new List<GameObject>();
     private List<GameObject> panelItem = new List<GameObject>();
 
-    private float timeLeft = 2.0f;
+    private float timeLeft = 10.0f;
     private bool timerEnabled;
     private bool lockedIn;
     private int playerReadied = 0;
@@ -55,11 +55,8 @@ public class LobbySystem : MonoBehaviour {
                     panelItem.Add(canvasChild.transform.GetChild(3).gameObject);
                 }
             }
-
-            //GameObject resetPanel = Instantiate(panels, new Vector3(panels[0].transform.position.x, panels[0].transform.position.y, -59.604f), Quaternion.identity);
-            //resetPanel.transform.SetParent(canvas.transform, false);
-            //resetPanel.SetActive(false);
         }
+
     }
 	
 	// Update is called once per frame
@@ -112,9 +109,9 @@ public class LobbySystem : MonoBehaviour {
                 SceneManager.LoadScene("MainScene");
             }
         }
-        //Debug.Log(playersConnected);
 
-        if(SceneManager.GetActiveScene() == SceneManager.GetSceneByName("MainScene"))
+        //Debug.Log(playersConnected);
+        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("MainScene"))
         {
 
             //MANAGE THE CAMERAS NICELY, REPLACE THE BACKGROUND OR ADJUST THE CAMERAS
@@ -127,23 +124,16 @@ public class LobbySystem : MonoBehaviour {
 
                 if (playerEntered[playerEnteredIndex] == false)
                 {
-                    //int arrayAdjustment = i + 1;
                     charactersToDeactivate = GameObject.FindGameObjectsWithTag("Team " + i);
 
-                    //for(int y = 1; y <= 3; y++)
-                    //{
-                    //    AIToDeactivate = GameObject.Find("Team " + i + " Gang Member " + y);
-                    //    AIToDeactivate.SetActive(false);
-                    //}
-                    //Debug.Log("Deactivated player " + i);
-                    for(int y = 0; y < charactersToDeactivate.Length; y++)
+                    for (int y = 0; y < charactersToDeactivate.Length; y++)
                     {
                         charactersToDeactivate[y].gameObject.SetActive(false);
                     }
-                        
+
                 }
 
-                if(playerEntered[playerEnteredIndex] == true && adjustSceneCameras == true)
+                if (playerEntered[playerEnteredIndex] == true && adjustSceneCameras == true)
                 {
                     Camera[] cameraArray;
                     PlayerController[] activePlayers = FindObjectsOfType<PlayerController>();
@@ -154,6 +144,7 @@ public class LobbySystem : MonoBehaviour {
                         case 2:
 
                             //Array system gathers cameras in a bizarre order
+                            //NEED TO HAVE IT SO ONLY THE TEAMS THAT ARE AVAILABLE ARE SELECTED
                             activePlayers[0].GetComponentInChildren<Camera>().rect = new Rect(new Vector2(0, 0.5f), new Vector2(1, 0.5f));
                             activePlayers[1].GetComponentInChildren<Camera>().rect = new Rect(new Vector2(0, 0), new Vector2(1, 0.5f));
                             adjustSceneCameras = false;
@@ -175,7 +166,6 @@ public class LobbySystem : MonoBehaviour {
             }
             DestroyImmediate(this.gameObject);
         }
-
     }
 
     private void PlayerLocked(int playerNumber)

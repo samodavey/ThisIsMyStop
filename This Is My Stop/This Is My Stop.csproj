@@ -342,6 +342,7 @@
     <Compile Include="Assets\Scripts\ArrowDirection.cs" />
     <Compile Include="Assets\Scripts\BasicAI.cs" />
     <Compile Include="Assets\Scripts\ControllerAssignment.cs" />
+    <Compile Include="Assets\Scripts\EscapedTeamMenu.cs" />
     <Compile Include="Assets\Scripts\ExitPointTrigger.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\HealthBar.cs" />

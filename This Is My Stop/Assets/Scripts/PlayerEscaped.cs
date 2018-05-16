@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerEscaped : MonoBehaviour {
 
@@ -20,7 +21,11 @@ public class PlayerEscaped : MonoBehaviour {
         //Destroy(other.gameObject);
         if(playerCollider.transform.parent.gameObject.tag == "Hunted")
         {
-            Debug.Log("CONGRATS YOU'VE ESCAPED");
+
+            DontDestroyOnLoad(playerCollider);
+            SceneManager.LoadScene("Escaped");
+
+            //Debug.Log("CONGRATS YOU'VE ESCAPED");
         }
     }
 }

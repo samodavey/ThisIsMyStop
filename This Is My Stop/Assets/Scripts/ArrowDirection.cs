@@ -8,34 +8,55 @@ public class ArrowDirection : MonoBehaviour {
 
     private GameObject[] playerTarget;
 
+    private Renderer rend;
+
     // Use this for initialization
     void Start () {
 
-        //target = GameObject.Find()
+        rend = GetComponent<Renderer>();
 
-        //Debug.Log(exitTarget.name);
-	}
+    }
 	
 	// Update is called once per frame
 	void Update () {
 
         exitTarget = GameObject.FindGameObjectWithTag("Destination").transform;
         playerTarget = GameObject.FindGameObjectsWithTag("Hunted");
+        float exitDist = Vector3.Distance(exitTarget.position, transform.position);
+        float playerDist;
 
         if (transform.parent.tag == "Hunted")
         {
             transform.LookAt(exitTarget);
+            if(exitDist < 30)
+            {
+                rend.enabled = false;
+            }
+            else
+            {
+                rend.enabled = true;
+            }
         }
         else
         {
             foreach(GameObject assignedTarget in playerTarget)
             {
+                playerDist = Vector3.Distance(assignedTarget.gameObject.transform.position, transform.position);
+
                 if (assignedTarget.name.Contains("Player"))
                 {
                     transform.LookAt(assignedTarget.transform);
                 }
+
+                if (playerDist < 30)
+                {
+                    rend.enabled = false;
+                }
+                else
+                {
+                    rend.enabled = true;
+                }
             }
-            //LOOK AT DEPENDANT ON DISTANCE
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -46,8 +47,6 @@ public class GameManager : MonoBehaviour
             //Turn on a random destination point
             exitPoints[randomDesIndex].SetActive(true);
 
-            //Debug.Log("You must hunt team " + randomTeamIndex);
-            //Debug.Log("Escaping team must reach train " + randomDesIndex);
 
             initializingTeams = false;
         }
@@ -113,7 +112,8 @@ public class GameManager : MonoBehaviour
         if (targetDestroyed == teamToHunt.Length)
         {
             //Load victory screen for player that killed the last team member
-            Debug.Log("YOU WIN");
+            SceneManager.LoadScene("HuntersWin");
+            Debug.Log("HUNTERS WIN");
         }
 
         //If that team makes it to the exit then they win!

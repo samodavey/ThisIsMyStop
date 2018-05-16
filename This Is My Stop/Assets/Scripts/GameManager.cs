@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
 
     //private GameObject[] taggedTeams = new GameObject[16];
 
-    private List<GameObject> teamToHunt = new List<GameObject>();
+    private GameObject[] teamToHunt = new GameObject[4];
 
     private int targetDestroyed;
 
@@ -41,8 +41,6 @@ public class GameManager : MonoBehaviour
 
         if (initializingTeams)
         {
-            //FIX THIS!
-
             StartCoroutine(teamInit());
 
             //Turn on a random destination point
@@ -58,9 +56,10 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log(teamsArray);
 
-        for (int i = 0; i < teamToHunt.Capacity; i++)
+        teamToHunt = GameObject.FindGameObjectsWithTag("Hunted");
+
+        for (int i = 0; i < teamToHunt.Length; i++)
         {
             if (teamToHunt[i].activeSelf == false)
             {
@@ -68,10 +67,10 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if (targetDestroyed == teamToHunt.Capacity)
+        if (targetDestroyed == teamToHunt.Length)
         {
             //Load victory screen for player that killed the last team member
-            //Debug.Log("YOU WIN");
+            Debug.Log("YOU WIN");
 
         }
 
@@ -99,7 +98,7 @@ public class GameManager : MonoBehaviour
         }
 
 
-        var randomTeamIndex = Random.Range(0, teamCount - 1);
+        var randomTeamIndex = Random.Range(0, teamCount);
 
 
         for(int l = 0; l < 4; l++)

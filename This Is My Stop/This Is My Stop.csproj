@@ -349,6 +349,7 @@
     <Compile Include="Assets\Scripts\LobbySystem.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />
     <Compile Include="Assets\Scripts\PlayerControlsSO.cs" />
+    <Compile Include="Assets\Scripts\PlayerEscaped.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\ProCore\ProBuilder\API Examples\Icosphere FFT\README.txt" />

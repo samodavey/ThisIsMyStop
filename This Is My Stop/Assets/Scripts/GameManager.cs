@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -31,10 +32,10 @@ public class GameManager : MonoBehaviour
         GameObject[] team2Chars = GameObject.FindGameObjectsWithTag("Team 2");
         GameObject[] team3Chars = GameObject.FindGameObjectsWithTag("Team 3");
         GameObject[] team4Chars = GameObject.FindGameObjectsWithTag("Team 4");
-        teamsArray[0] = team1Chars;
-        teamsArray[1] = team2Chars;
-        teamsArray[2] = team3Chars;
-        teamsArray[3] = team4Chars;
+        teamsArray[0] = team1Chars.OrderBy((x) => x.name).ToArray(); ;
+        teamsArray[1] = team2Chars.OrderBy((x) => x.name).ToArray(); ;
+        teamsArray[2] = team3Chars.OrderBy((x) => x.name).ToArray(); ;
+        teamsArray[3] = team4Chars.OrderBy((x) => x.name).ToArray(); ;
 
         var randomDesIndex = Random.Range(0, 4);
 
@@ -57,7 +58,6 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         //Debug.Log(teamsArray);
 
         for (int i = 0; i < teamToHunt.Capacity; i++)
@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour
         if (targetDestroyed == teamToHunt.Capacity)
         {
             //Load victory screen for player that killed the last team member
-            Debug.Log("YOU WIN");
+            //Debug.Log("YOU WIN");
 
         }
 
@@ -88,28 +88,27 @@ public class GameManager : MonoBehaviour
 
         int playerCount = FindObjectsOfType<PlayerController>().Length;
 
-        for (int j = 0; j < playerCount; j++)
+        List<GameObject> finalPlayers = new List<GameObject>();
+
+        for (int j = 0; j < teamsArray.Length; j++)
         {
-            if(teamsArray[j][0].gameObject.activeSelf)
+            if (teamsArray[j][0] != null)
             {
                 teamCount++;
             }
         }
 
 
-        var randomTeamIndex = Random.Range(1, teamCount);
+        var randomTeamIndex = Random.Range(0, teamCount - 1);
 
-        //for (int i = 0; i < teamsArray.Length; i++)
-        //{
-        //    if (teamsArray[i][0].gameObject.tag == "Team " + randomTeamIndex)
-        //    {
-                for(int j = 0; j < teamsArray[randomTeamIndex].Length; j++)
-                {
-                    //teamToHunt.Add(teamsArray[i][j]);
-                    teamsArray[randomTeamIndex][j].gameObject.tag = "Hunted";
-                }
-                //break;
-          //  }
-       // }
+
+        for(int l = 0; l < 4; l++)
+        {
+            finalPlayers.Add(teamsArray[randomTeamIndex][l]);
+            finalPlayers[l].gameObject.tag = "Hunted";
+        }
+
+        Debug.Log(finalPlayers);
+
     }
 }

@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
 
     private GameObject[] teamToHunt = new GameObject[4];
 
+    private TextMesh[] playerRole;
+
     private int targetDestroyed;
 
     private bool initializingTeams = true;
@@ -28,12 +30,12 @@ public class GameManager : MonoBehaviour
 
     private bool movedScene;
 
+    private float timePassed;
+
     private Collision collision;
     // Use this for initialization
     void Start()
     {
-        //StartCoroutine(teamInit());
-
         //Maybe make an GameObject Array?
         GameObject[] team1Chars = GameObject.FindGameObjectsWithTag("Team 1");
         GameObject[] team2Chars = GameObject.FindGameObjectsWithTag("Team 2");
@@ -49,10 +51,8 @@ public class GameManager : MonoBehaviour
         if (initializingTeams)
         {
             StartCoroutine(teamInit());
-
             //Turn on a random destination point
             exitPoints[randomDesIndex].SetActive(true);
-
 
             initializingTeams = false;
         }
@@ -61,9 +61,33 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        timePassed += Time.deltaTime;
+
+        if(playerRole != null)
+        {
+            for (int i = 0; i < playerRole.Length; i++)
+            {
+                if (playerRole[i] != null)
+                {
+                    playerRole[i].color = new Color(playerRole[i].color.r, playerRole[i].color.g, playerRole[i].color.b, playerRole[i].color.a - (Time.deltaTime / 7.5f));
+                }
+                else
+                {
+                    return;
+                }
+                if (timePassed >= 10)
+                {
+                    Destroy(playerRole[i]);
+                }
+            }
+        }
+        else
+        {
+            return;
+        }
+
 
         StartCoroutine(isTeamDead());
-
         if (targetDestroyed == teamToHunt.Length && movedScene == false)
         {
             //Collider charCollision = GetComponent<Collision>().collider;
@@ -130,14 +154,23 @@ public class GameManager : MonoBehaviour
 
         }
 
-        Debug.Log(huntedPlayers);
-
-
+        //Debug.Log(huntedPlayers);
 
         teamToHunt = GameObject.FindGameObjectsWithTag("Hunted");
 
-
-        //If that team makes it to the exit then they win!
+        playerRole = FindObjectsOfType<TextMesh>();
+        //DISPLAY TEXT FOR PLAYERS, LASTS A FEW SECONDS BEFORE REMOVAL
+        for (int k = 0; k < playerRole.Length; k++)
+        {
+            if(playerRole[k].gameObject.transform.parent.tag == "Hunted")
+            {
+                playerRole[k].text = "YOU ARE THE HUNTED! \n RUN TO YOUR TRAIN HOME!";
+            }
+            else
+            {
+                playerRole[k].text = "YOU ARE A HUNTER! \n CHASE DOWN THE HUNTED!";
+            }
+        }
 
 
 

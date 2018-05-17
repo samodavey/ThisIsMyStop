@@ -143,7 +143,7 @@ public class BasicAI : MonoBehaviour {
                                 if (!IsInvoking("SelectTarget"))
                                 {
                                     characterTemp = character;
-                                    Invoke("SelectTarget", 5);
+                                    Invoke("SelectTarget", 0.5f);
                                 }
 
                                 //target.position = new Vector3(character.transform.position.x, character.transform.position.y, character.transform.position.z - 3);

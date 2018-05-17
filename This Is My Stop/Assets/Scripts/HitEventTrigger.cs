@@ -7,6 +7,8 @@ public class HitEventTrigger : MonoBehaviour
 {
     public UnityEvent onHit;
 
+    private string hitBy;
+
 	// Use this for initialization
 	void Start () {
 
@@ -23,8 +25,12 @@ public class HitEventTrigger : MonoBehaviour
         Animator anim = GetComponentInParent<Animator>();
         if (other.tag == "DamageObj" || other.tag == "KickDamageObj" && !anim.GetCurrentAnimatorStateInfo(0).IsName("Blocking"))
         {
-            //other.SendMessage("TakeDamage", 10, SendMessageOptions.DontRequireReceiver);
             onHit.Invoke();
+            if(gameObject.transform.parent.tag == "Hunted")
+            {
+                hitBy = LayerMask.LayerToName(other.gameObject.layer);
+                FindObjectOfType<WinningTeam>().winnner = hitBy;
+            }
         }
         else if(other.tag == "DamageObj" || other.tag == "KickDamageObj" && anim.GetCurrentAnimatorStateInfo(0).IsName("Blocking"))
         {

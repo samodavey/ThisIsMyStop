@@ -21,9 +21,10 @@ public class PlayerEscaped : MonoBehaviour {
         //Destroy(other.gameObject);
         if(playerCollider.transform.parent.gameObject.tag == "Hunted")
         {
-
+            Scene sceneToLoad = SceneManager.GetSceneByBuildIndex(2);
             DontDestroyOnLoad(playerCollider);
-            SceneManager.LoadScene("Escaped");
+            SceneManager.MoveGameObjectToScene(playerCollider.gameObject, sceneToLoad);
+            SceneManager.SetActiveScene(sceneToLoad);
 
             //Debug.Log("CONGRATS YOU'VE ESCAPED");
         }

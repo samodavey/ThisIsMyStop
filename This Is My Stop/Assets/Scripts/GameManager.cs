@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
         teamsArray[2] = team3Chars.OrderBy((x) => x.name).ToArray(); ;
         teamsArray[3] = team4Chars.OrderBy((x) => x.name).ToArray(); ;
 
-        var randomDesIndex = Random.Range(0, 4);
+        var randomDesIndex = Random.Range(0, 3);
 
         if (initializingTeams)
         {

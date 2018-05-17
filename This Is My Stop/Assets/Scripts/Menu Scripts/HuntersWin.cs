@@ -35,7 +35,7 @@ public class HuntersWin : MonoBehaviour
         else
         {
             teamName = winningTeam.GetComponent<WinningTeam>().winnner;
-            title.text = "               " + teamName + "\n killed the escaping team!";
+            title.text = "               " + teamName + "\n killed the escaping team! \n Press start to return to the main menu";
         }
     }
 }

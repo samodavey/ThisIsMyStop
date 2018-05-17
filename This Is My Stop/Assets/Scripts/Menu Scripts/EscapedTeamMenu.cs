@@ -18,7 +18,7 @@ public class EscapedTeamMenu : MonoBehaviour {
         title = FindObjectOfType<TextMesh>();
         teamName = LayerMask.LayerToName(collidedPlayer.gameObject.layer);
 
-        title.text = teamName + " Escaped!";
+        title.text = teamName + " Escaped! \n Press start to return to the main menu";
     }
 	
 	// Update is called once per frame

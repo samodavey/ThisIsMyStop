@@ -7,7 +7,11 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField]
+    private AudioClip[] music = new AudioClip[2];
 
+    [SerializeField]
+    private AudioSource audioSource;
 
     [SerializeField]
     private GameObject[] exitPoints;
@@ -36,6 +40,9 @@ public class GameManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+
+        PlayNextSong();
+
         //Maybe make an GameObject Array?
         GameObject[] team1Chars = GameObject.FindGameObjectsWithTag("Team 1");
         GameObject[] team2Chars = GameObject.FindGameObjectsWithTag("Team 2");
@@ -61,6 +68,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         timePassed += Time.deltaTime;
 
         if(playerRole != null)
@@ -100,6 +108,13 @@ public class GameManager : MonoBehaviour
             SceneManager.MoveGameObjectToScene(winningTeam.gameObject, sceneToLoad);
             SceneManager.UnloadSceneAsync("MainScene");
         }
+    }
+
+    private void PlayNextSong()
+    {
+        audioSource.clip = music[UnityEngine.Random.Range(0, music.Length)];
+        audioSource.Play();
+        Invoke("PlayNextSong", audioSource.clip.length + 2);
     }
 
     IEnumerator isTeamDead()

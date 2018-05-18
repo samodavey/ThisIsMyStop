@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -38,7 +36,8 @@ public class LobbySystem : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        if(canvas != null)
+
+        if (canvas != null)
         {
             int childCount = canvas.transform.childCount;
 
@@ -104,7 +103,6 @@ public class LobbySystem : MonoBehaviour {
 
             if (timeLeft == 0)
             {
-                SceneManager.UnloadSceneAsync("Lobby");
                 SceneManager.LoadScene("MainScene");
             }
         }

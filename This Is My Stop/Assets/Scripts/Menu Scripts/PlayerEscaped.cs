@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PlayerEscaped : MonoBehaviour {
@@ -19,14 +16,12 @@ public class PlayerEscaped : MonoBehaviour {
 
     void OnTriggerEnter(Collider playerCollider)
     {
-        //Destroy(other.gameObject);
         if(playerCollider.transform.parent.gameObject.tag == "Hunted")
         {
-            SceneManager.LoadScene("Escaped", LoadSceneMode.Additive);
+            SceneManager.LoadScene("Escaped",LoadSceneMode.Additive);
             Scene sceneToLoad = SceneManager.GetSceneByName("Escaped");
             SceneManager.MoveGameObjectToScene(playerCollider.gameObject, sceneToLoad);
             SceneManager.UnloadSceneAsync("MainScene");
-            //Debug.Log("CONGRATS YOU'VE ESCAPED");
         }
     }
 }

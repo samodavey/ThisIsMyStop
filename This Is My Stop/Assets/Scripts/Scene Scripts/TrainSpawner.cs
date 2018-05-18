@@ -22,8 +22,7 @@ public class TrainSpawner : MonoBehaviour {
         }
         if(trainInlevel != null)
         {
-            //trainInlevel.transform.position -= trainToSpawn.transform.right * Time.deltaTime * movementSpeed;
-            trainInlevel.transform.position = new Vector3(trainInlevel.transform.position.x - (Time.deltaTime * movementSpeed), trainInlevel.transform.position.y + (Mathf.Sin(Time.time * 10) * 0.005f), trainInlevel.transform.position.z + (Mathf.Sin(Time.time * 10) * 0.005f )  );
+            trainInlevel.transform.position = new Vector3(this.transform.position.x - (Time.deltaTime * movementSpeed), trainInlevel.transform.position.y + (Mathf.Sin(Time.time * 10) * 0.005f), trainInlevel.transform.position.z + (Mathf.Sin(Time.time * 10) * 0.005f )  );
         }
         
     }
@@ -31,6 +30,6 @@ public class TrainSpawner : MonoBehaviour {
     void SpawnTrain()
     {
         Destroy(trainInlevel);
-        trainInlevel = Instantiate(trainToSpawn, transform.position, Quaternion.identity, transform);
+        trainInlevel = Instantiate(trainToSpawn, transform.position, transform.rotation, transform);
     }
 }

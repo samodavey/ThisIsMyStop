@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
+//using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
@@ -245,7 +245,7 @@ public class PlayerController : MonoBehaviour {
         {
             isDead = true;
             //takePunch = false;
-            newObject = (Transform)PrefabUtility.InstantiatePrefab(playerControls.playerRagdoll);
+            newObject = Instantiate(playerControls.playerRagdoll).transform; //(Transform)PrefabUtility.InstantiatePrefab(playerControls.playerRagdoll);
             newObject.transform.position = transform.position;
             newObject.transform.rotation = transform.rotation;
             gameObject.SetActive(false);

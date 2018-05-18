@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEditor;
+﻿using System.Collections.Generic;
+//using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
@@ -245,7 +243,7 @@ public class BasicAI : MonoBehaviour {
         {
             isDead = true;
             //takePunch = false;
-            newObject = (Transform)PrefabUtility.InstantiatePrefab(AIControls.aiRagdoll);
+            newObject = Instantiate(AIControls.aiRagdoll).transform; //(Transform)PrefabUtility.InstantiatePrefab(AIControls.aiRagdoll) as Transform;
             newObject.transform.position = transform.position;
             newObject.transform.rotation = transform.rotation;
             gameObject.SetActive(false);

@@ -1,16 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class HuntersWin : MonoBehaviour
 {
     private GameObject winningTeam;
 
-    PlayerController collidedPlayer;
-    Canvas canvas;
-    TextMesh title;
-    AudioListener audioListener;
-    string teamName;
+    private PlayerController collidedPlayer;
+    private Canvas canvas;
+    private TextMesh title;
+    private AudioListener audioListener;
+    private string teamName;
+
+    [SerializeField]
+    private PlayerControlsSO[] playerControllers;
 
     // Use this for initialization
     void Start()
@@ -35,7 +37,16 @@ public class HuntersWin : MonoBehaviour
         else
         {
             teamName = winningTeam.GetComponent<WinningTeam>().winnner;
-            title.text = "               " + teamName + "\n killed the escaping team! \n Press start to return to the main menu";
+            title.text = "               " + teamName + "\n killed the escaping team! \n Press start to quit the game";
         }
+
+        for (int i = 0; i < playerControllers.Length; i++)
+        {
+            if (Input.GetKeyDown(playerControllers[i].lobbyReady))
+            {
+                Application.Quit();
+            }
+        }
+
     }
 }

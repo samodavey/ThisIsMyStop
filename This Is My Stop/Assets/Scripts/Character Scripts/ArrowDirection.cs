@@ -28,7 +28,7 @@ public class ArrowDirection : MonoBehaviour {
         if (transform.parent.tag == "Hunted")
         {
             transform.LookAt(exitTarget);
-            if(exitDist < 30)
+            if(exitDist < 15)
             {
                 rend.enabled = false;
             }

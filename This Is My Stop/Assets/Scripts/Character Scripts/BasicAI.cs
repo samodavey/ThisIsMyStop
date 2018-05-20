@@ -107,26 +107,9 @@ public class BasicAI : MonoBehaviour {
         {
             if (character.tag != this.gameObject.tag)
             {
-                //List<Transform> targetedChar = new List<Transform>();
 
                 float distance = Vector3.Distance(character.transform.position, this.transform.position);
 
-                //targetedChar.Add(target);
-
-                //Can't be done because of Monobehaviour to ScriptableObject issue
-
-                //AIControlsSO enemyHealth = character.GetComponent<AIControlsSO>();
-                //List<int> listedEnemyHealth = new List<int>();
-
-                //listedEnemyHealth.Add(enemyHealth.health);
-
-                ////Ideally attack the enemy with the lowest health
-                //int lowestEnemyHealth = listedEnemyHealth.Min();
-
-                //if(enemyHealth.health == lowestEnemyHealth)
-                //{
-                //    target.position = new Vector3(character.transform.position.x, character.transform.position.y, character.transform.position.z);
-                //}
                     if (distance <= 8)
                     {
                         timeUntilNextAttack += Time.deltaTime;
@@ -134,17 +117,11 @@ public class BasicAI : MonoBehaviour {
                             if (newTarget == false || timeUntilNextAttack >= 2 && target.hasChanged)
                             {
 
-                                //target.gameObject.transform.position = character.transform.position;
-
-                                //target = character.transform;
-                                //INVOKING IS GREAT!
                                 if (!IsInvoking("SelectTarget"))
                                 {
                                     characterTemp = character;
                                     Invoke("SelectTarget", 0.5f);
                                 }
-
-                                //target.position = new Vector3(character.transform.position.x, character.transform.position.y, character.transform.position.z - 3);
 
                                 newTarget = true;
 
@@ -238,12 +215,10 @@ public class BasicAI : MonoBehaviour {
 
     public void TakeDamage(int damage)
     {
-        //print("hit " + transform + " for " + damage);
         if (AIControls.health <= 0 && !isDead)
         {
             isDead = true;
-            //takePunch = false;
-            newObject = Instantiate(AIControls.aiRagdoll).transform; //(Transform)PrefabUtility.InstantiatePrefab(AIControls.aiRagdoll) as Transform;
+            newObject = Instantiate(AIControls.aiRagdoll).transform;
             newObject.transform.position = transform.position;
             newObject.transform.rotation = transform.rotation;
             gameObject.SetActive(false);

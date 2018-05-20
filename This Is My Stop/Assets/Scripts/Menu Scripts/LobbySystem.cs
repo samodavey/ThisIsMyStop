@@ -3,13 +3,14 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Linq;
+using System;
+using System.Collections;
 
 public class LobbySystem : MonoBehaviour {
 
     /// <summary>
     /// Main lobby system, transfers players from one scene to another and culls the camera
     /// </summary>
-
 
     [SerializeField]
     Camera mainCamera;
@@ -20,6 +21,9 @@ public class LobbySystem : MonoBehaviour {
     [SerializeField]
     private Image timerContent;
 
+    [SerializeField]
+    private SpriteRenderer instructionsSprite;
+
     public PlayerControlsSO[] playerControllers;
 
     private static int playersConnected;
@@ -29,10 +33,13 @@ public class LobbySystem : MonoBehaviour {
     private List<GameObject> panels = new List<GameObject>();
     private List<GameObject> panelItem = new List<GameObject>();
 
-    private float timeLeft = 2.0f;
+    private float timeLeft = 10.0f;
     private bool timerEnabled;
     private bool lockedIn;
     private int playerReadied = 0;
+
+    private Quaternion newRotation = new Quaternion(0, 0, 0, 0);
+    private Vector3 newVector = new Vector3(13.86f, 6.779f, -8.909f);
 
     // Use this for initialization
     void Start () {
@@ -54,7 +61,6 @@ public class LobbySystem : MonoBehaviour {
                 }
             }
         }
-
     }
 	
 	// Update is called once per frame
@@ -62,10 +68,16 @@ public class LobbySystem : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.JoystickButton7) && mainCamera.transform.localRotation.y != 180)
         {
+
             //Maybe have the Camera lerp?
-            mainCamera.transform.rotation = new Quaternion(0, 0, 0, 0);
-            mainCamera.transform.position = new Vector3(13.86f, 6.779f, -8.909f);
+            mainCamera.transform.rotation = newRotation;
+            mainCamera.transform.position = newVector;
             awayFromTitle = true;
+        }
+
+        if (awayFromTitle == true)
+        {
+            StartCoroutine(instructionsFade());
         }
 
         for (int i = 0; i < playerControllers.Length; i++)
@@ -317,5 +329,13 @@ public class LobbySystem : MonoBehaviour {
                 break;
         }
 
+    }
+    private IEnumerator instructionsFade()
+    {
+        yield return new WaitForSeconds(5);
+        if (instructionsSprite != null)
+        {
+            instructionsSprite.color = new Color(instructionsSprite.color.r, instructionsSprite.color.g, instructionsSprite.color.b, instructionsSprite.color.a - (Time.deltaTime / 2));
+        }
     }
 }

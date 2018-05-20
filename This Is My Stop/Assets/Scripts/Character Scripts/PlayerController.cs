@@ -245,7 +245,7 @@ public class PlayerController : MonoBehaviour {
         {
             isDead = true;
             //takePunch = false;
-            newObject = Instantiate(playerControls.playerRagdoll).transform; //(Transform)PrefabUtility.InstantiatePrefab(playerControls.playerRagdoll);
+            newObject = Instantiate(playerControls.playerRagdoll).transform;
             newObject.transform.position = transform.position;
             newObject.transform.rotation = transform.rotation;
             gameObject.SetActive(false);

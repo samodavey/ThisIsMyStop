@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
-    private AudioClip[] music = new AudioClip[2];
+    private AudioClip[] music = new AudioClip[4];
 
     [SerializeField]
     private AudioSource audioSource;
@@ -168,8 +168,6 @@ public class GameManager : MonoBehaviour
             }
 
         }
-
-        //Debug.Log(huntedPlayers);
 
         teamToHunt = GameObject.FindGameObjectsWithTag("Hunted");
 

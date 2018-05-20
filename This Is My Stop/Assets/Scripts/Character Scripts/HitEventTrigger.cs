@@ -9,10 +9,16 @@ public class HitEventTrigger : MonoBehaviour
 
     private string hitBy;
 
-	// Use this for initialization
-	void Start () {
+    [SerializeField]
+    private AudioSource audioSource;
 
-	}
+    [SerializeField]
+    private AudioClip punchSound;
+
+    // Use this for initialization
+    void Start () {
+        audioSource.clip = punchSound;
+    }
 
     // Update is called once per frame
     private void Update()
@@ -26,7 +32,16 @@ public class HitEventTrigger : MonoBehaviour
         if (other.tag == "DamageObj" || other.tag == "KickDamageObj" && !anim.GetCurrentAnimatorStateInfo(0).IsName("Blocking"))
         {
             onHit.Invoke();
-            if(gameObject.transform.parent.tag == "Hunted")
+            if(audioSource != null)
+            {
+                audioSource.Play();
+            }
+            else
+            {
+                return;
+            }
+
+            if (gameObject.transform.parent.tag == "Hunted")
             {
                 hitBy = LayerMask.LayerToName(other.gameObject.layer);
                 FindObjectOfType<WinningTeam>().winnner = hitBy;

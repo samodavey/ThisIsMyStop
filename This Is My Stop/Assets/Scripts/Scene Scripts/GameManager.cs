@@ -32,11 +32,10 @@ public class GameManager : MonoBehaviour
 
     private bool[] checkedActiveState = new bool[4];
 
-    private bool movedScene;
+    private bool movedScene = false;
 
     private float timePassed;
 
-    private Collision collision;
     // Use this for initialization
     void Start()
     {
@@ -63,11 +62,28 @@ public class GameManager : MonoBehaviour
 
             initializingTeams = false;
         }
+
+        StartCoroutine(isTeamDead());
+
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        if(targetDestroyed == teamToHunt.Length && movedScene == false)
+        {
+            movedScene = true;
+            WinningTeam winningTeam = GetComponent<WinningTeam>();
+
+            //Load victory screen for player that killed the last team member
+            SceneManager.LoadScene("HuntersWin", LoadSceneMode.Additive);
+            Scene sceneToLoad = SceneManager.GetSceneByName("HuntersWin");
+            SceneManager.MoveGameObjectToScene(winningTeam.gameObject, sceneToLoad);
+            SceneManager.UnloadSceneAsync("MainScene");
+        }
+
+
 
         timePassed += Time.deltaTime;
 
@@ -89,24 +105,17 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
-        else
-        {
-            return;
-        }
 
-
-        StartCoroutine(isTeamDead());
         if (targetDestroyed == teamToHunt.Length && movedScene == false)
         {
-            //Collider charCollision = GetComponent<Collision>().collider;
-            movedScene = true;
-            WinningTeam winningTeam = GetComponent<WinningTeam>(); 
+            //movedScene = true;
+            //WinningTeam winningTeam = GetComponent<WinningTeam>(); 
 
-            //Load victory screen for player that killed the last team member
-            SceneManager.LoadScene("HuntersWin", LoadSceneMode.Additive);
-            Scene sceneToLoad = SceneManager.GetSceneByName("HuntersWin");
-            SceneManager.MoveGameObjectToScene(winningTeam.gameObject, sceneToLoad);
-            SceneManager.UnloadSceneAsync("MainScene");
+            ////Load victory screen for player that killed the last team member
+            //SceneManager.LoadScene("HuntersWin", LoadSceneMode.Additive);
+            //Scene sceneToLoad = SceneManager.GetSceneByName("HuntersWin");
+            //SceneManager.MoveGameObjectToScene(winningTeam.gameObject, sceneToLoad);
+            //SceneManager.UnloadSceneAsync("MainScene");
         }
     }
 
@@ -120,17 +129,15 @@ public class GameManager : MonoBehaviour
     IEnumerator isTeamDead()
     {
         yield return new WaitForSeconds(0.5f);
-
         for (int i = 0; i < teamToHunt.Length; i++)
         {
             if (teamToHunt[i].gameObject.activeSelf == false && checkedActiveState[i] == false)
             {
                 targetDestroyed++;
                 checkedActiveState[i] = true;
-                collision = GetComponent<Collision>();
-                Debug.Log(collision.gameObject);
             }
         }
+        StartCoroutine(isTeamDead());
     }
 
     IEnumerator teamInit()

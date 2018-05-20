@@ -21,7 +21,7 @@ public class EscapedTeamMenu : MonoBehaviour {
         title = FindObjectOfType<TextMesh>();
         teamName = LayerMask.LayerToName(collidedPlayer.gameObject.layer);
 
-        title.text = teamName + " Escaped! \n Press start to return to quit the game";
+        title.text = teamName + " Escaped! \n Press start to quit the game";
         Destroy(audioListener);
     }
 	

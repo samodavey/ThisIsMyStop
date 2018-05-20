@@ -37,7 +37,7 @@ public class HuntersWin : MonoBehaviour
         else
         {
             teamName = winningTeam.GetComponent<WinningTeam>().winnner;
-            title.text = "               " + teamName + "\n killed the escaping team! \n Press start to quit the game";
+            title.text = teamName + "\n killed the escaping team! \n Press start to quit the game";
         }
 
         for (int i = 0; i < playerControllers.Length; i++)

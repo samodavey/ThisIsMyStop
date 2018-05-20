@@ -41,7 +41,7 @@ public class HitEventTrigger : MonoBehaviour
                 return;
             }
 
-            if (gameObject.transform.parent.tag == "Hunted")
+            if (gameObject.transform.root.tag == "Hunted")
             {
                 hitBy = LayerMask.LayerToName(other.gameObject.layer);
                 FindObjectOfType<WinningTeam>().winnner = hitBy;

@@ -153,7 +153,7 @@ ModelImporter:
       events:
       - time: 0.93168557
         functionName: AlertObservers
-        data: Animation Ended
+        data: TakePunch
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0

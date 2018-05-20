@@ -334,16 +334,22 @@
     <Compile Include="Assets\ProCore\ProGrids\Classes\pg_SceneMeshRender.cs" />
     <Compile Include="Assets\ProCore\ProGrids\Classes\pg_Util.cs" />
     <Compile Include="Assets\ProCore\ProGrids\MonoBehaviour\pg_IgnoreSnap.cs" />
-    <Compile Include="Assets\Scripts\AIControlsSO.cs" />
-    <Compile Include="Assets\Scripts\AIHealth.cs" />
-    <Compile Include="Assets\Scripts\BasicAI.cs" />
-    <Compile Include="Assets\Scripts\ControllerAssignment.cs" />
-    <Compile Include="Assets\Scripts\GameManager.cs" />
-    <Compile Include="Assets\Scripts\HealthBar.cs" />
-    <Compile Include="Assets\Scripts\HitEventTrigger.cs" />
-    <Compile Include="Assets\Scripts\LobbySystem.cs" />
-    <Compile Include="Assets\Scripts\PlayerController.cs" />
-    <Compile Include="Assets\Scripts\PlayerControlsSO.cs" />
+    <Compile Include="Assets\Scripts\Character Scripts\AIControlsSO.cs" />
+    <Compile Include="Assets\Scripts\Character Scripts\AIHealth.cs" />
+    <Compile Include="Assets\Scripts\Character Scripts\ArrowDirection.cs" />
+    <Compile Include="Assets\Scripts\Character Scripts\BasicAI.cs" />
+    <Compile Include="Assets\Scripts\Character Scripts\ControllerAssignment.cs" />
+    <Compile Include="Assets\Scripts\Character Scripts\HealthBar.cs" />
+    <Compile Include="Assets\Scripts\Character Scripts\HitEventTrigger.cs" />
+    <Compile Include="Assets\Scripts\Character Scripts\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\Character Scripts\WinningTeam.cs" />
+    <Compile Include="Assets\Scripts\Menu Scripts\EscapedTeamMenu.cs" />
+    <Compile Include="Assets\Scripts\Menu Scripts\HuntersWin.cs" />
+    <Compile Include="Assets\Scripts\Menu Scripts\LobbySystem.cs" />
+    <Compile Include="Assets\Scripts\Menu Scripts\PlayerEscaped.cs" />
+    <Compile Include="Assets\Scripts\Scene Scripts\GameManager.cs" />
+    <Compile Include="Assets\Scripts\Scene Scripts\TrainSpawner.cs" />
+    <Compile Include="Assets\Scripts\Scriptable Objects\PlayerControlsSO.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\ProCore\ProBuilder\API Examples\Icosphere FFT\README.txt" />
@@ -372,6 +378,8 @@
     <None Include="Assets\ProCore\ProGrids\About\pc_AboutEntry_ProGrids.txt" />
     <None Include="Assets\ProCore\ProGrids\Shader\pg_GridShader.shader" />
     <None Include="Assets\Shaders\CircleHealth.shader" />
+    <None Include="Assets\Shaders\RenderOnTop.shader" />
+    <None Include="Assets\Shaders\ToonShader.shader" />
     <None Include="Assets\Standard Assets\Characters\FirstPersonCharacter\FirstPersonCharacterGuidelines.txt" />
     <None Include="Assets\Standard Assets\Characters\RollerBall\RollerBallGuidelines.txt" />
     <None Include="Assets\Standard Assets\Characters\ThirdPersonCharacter\ThirdPersonCharacterGuidelines.txt" />

@@ -17,6 +17,7 @@ public class HealthBar : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        //Calculates character's current health to be later calculated by the shader
         playerHealthVal = 1 - ((float)playerControls.health / 500);
         HandleBar();
     }
@@ -27,6 +28,7 @@ public class HealthBar : MonoBehaviour {
         {
             renderer = GetComponent<Renderer>();
         }
+        //Sets the shader material cutoff dependant on the health value
         renderer.material.SetFloat("_Cutoff", playerHealthVal);
     }
 }

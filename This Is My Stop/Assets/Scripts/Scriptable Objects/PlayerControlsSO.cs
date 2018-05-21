@@ -5,6 +5,11 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Controls", menuName = "Player Controls", order = 1)]
 public class PlayerControlsSO : ScriptableObject
 {
+    /// <summary>
+    /// Scriptable Object setup used by all characters containing 
+    /// important gameplay variables
+    /// </summary>
+
     public string horizontal;
     public string vertical;
     public string camHor;

@@ -84,7 +84,7 @@ public class PlayerController : MonoBehaviour {
           
         anim.SetFloat("Speed", joyVert);
 
-        //Light Punches
+        //Light Punch Animations
 
         if (Input.GetKeyDown(playerControls.lightPunch))
         {
@@ -111,6 +111,7 @@ public class PlayerController : MonoBehaviour {
                     break;
             }
         }
+        //Heavy Punch Animations
         if (Input.GetKeyDown(playerControls.heavyPunch))
         {
             heavyPunchTrigger = true;
@@ -124,18 +125,14 @@ public class PlayerController : MonoBehaviour {
                     anim.SetBool("HeavyPunch2", heavyPunchTrigger);
                     timeHeavyPunch = 0;
                     break;
-                //case 2:
-                //    anim.SetBool("HeavyPunch3", heavyPunchTrigger);
-                //    timeHeavyPunch++;
-                //    break;
                 default:
                     anim.SetBool("HeavyPunch1", false);
                     anim.SetBool("HeavyPunch2", false);
-                    //anim.SetBool("HeavyPunch3", false);
                     timeHeavyPunch = 0;
                     break;
             }
         }
+        //Kicking Animations
         if (Input.GetKeyDown(playerControls.kick))
         {
             kickTrigger = true;
@@ -145,21 +142,13 @@ public class PlayerController : MonoBehaviour {
                     anim.SetBool("Kick1", kickTrigger);
                     timeKick = 0;
                     break;
-                //case 1:
-                //    anim.SetBool("Kick2", kickTrigger);
-                //    timeKick++;
-                //    break;
-                //case 2:
-                //    anim.SetBool("HeavyPunch3", heavyPunchTrigger);
-                //    timeHeavyPunch++;
-                //    break;
                 default:
                     anim.SetBool("Kick1", false);
-                    //anim.SetBool("Kick2", false);
                     timeKick = 0;
                     break;
             }
         }
+        //Checks if the animations have finished playing before moving onto the next
         for (int i = 0; i <= 3; i++)
         {
             if (anim.GetCurrentAnimatorStateInfo(0).IsName("Light Punch " + i))
@@ -234,17 +223,14 @@ public class PlayerController : MonoBehaviour {
 
     public float playerHealth(float playerHealth)
     {
-        //playerHealth = playerOneCurrentHealth;
         return playerHealth;
     }
 
     public void TakeDamage(int damage)
     {
-        //print("hit " + transform + " for " + damage);
         if (playerControls.health <= 0 && !isDead)
         {
             isDead = true;
-            //takePunch = false;
             newObject = Instantiate(playerControls.playerRagdoll).transform;
             newObject.transform.position = transform.position;
             newObject.transform.rotation = transform.rotation;

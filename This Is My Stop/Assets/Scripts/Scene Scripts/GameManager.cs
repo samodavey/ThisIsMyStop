@@ -105,18 +105,6 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
-
-        if (targetDestroyed == teamToHunt.Length && movedScene == false)
-        {
-            //movedScene = true;
-            //WinningTeam winningTeam = GetComponent<WinningTeam>(); 
-
-            ////Load victory screen for player that killed the last team member
-            //SceneManager.LoadScene("HuntersWin", LoadSceneMode.Additive);
-            //Scene sceneToLoad = SceneManager.GetSceneByName("HuntersWin");
-            //SceneManager.MoveGameObjectToScene(winningTeam.gameObject, sceneToLoad);
-            //SceneManager.UnloadSceneAsync("MainScene");
-        }
     }
 
     private void PlayNextSong()

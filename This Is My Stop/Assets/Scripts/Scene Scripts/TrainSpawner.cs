@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class TrainSpawner : MonoBehaviour {
 
+    /// <summary>
+    /// Spawns a train model which slightly moves around to give the image of the engine running
+    /// </summary>
+    /// 
     [SerializeField]
     private GameObject trainToSpawn;
     GameObject trainInlevel;

@@ -6,6 +6,10 @@ using UnityEngine.Events;
 
 public class BasicAI : MonoBehaviour {
 
+    /// <summary>
+    /// Basic AI for player's team members
+    /// </summary>
+
     [SerializeField]
     private Transform target;
 
@@ -47,7 +51,8 @@ public class BasicAI : MonoBehaviour {
         GameObject[] team2Chars = GameObject.FindGameObjectsWithTag("Team 2");
         GameObject[] team3Chars = GameObject.FindGameObjectsWithTag("Team 3");
         GameObject[] team4Chars = GameObject.FindGameObjectsWithTag("Team 4");
-        //Maybe knock it down to one for loop?
+
+
         for (int i = 0; i < team1Chars.Length; i++)
         {
             taggedTeams.Add(team1Chars[i].gameObject);
@@ -144,7 +149,7 @@ public class BasicAI : MonoBehaviour {
                     
                     }
 
-                    //Run away if health is low
+                    //Block if health is low
                     if (AIControls.health <= 100)
                     {
                         aiAnim.SetBool("Blocking", true);
@@ -209,7 +214,6 @@ public class BasicAI : MonoBehaviour {
 
     public float playerHealth(float playerHealth)
     {
-        //playerHealth = playerOneCurrentHealth;
         return playerHealth;
     }
 

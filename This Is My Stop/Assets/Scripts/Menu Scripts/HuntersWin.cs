@@ -3,6 +3,10 @@ using UnityEngine.SceneManagement;
 
 public class HuntersWin : MonoBehaviour
 {
+    /// <summary>
+    /// Gathers the appropriate data for the team that takes out the hunted
+    /// </summary>
+
     private GameObject winningTeam;
 
     private PlayerController collidedPlayer;
@@ -22,8 +26,6 @@ public class HuntersWin : MonoBehaviour
         collidedPlayer = FindObjectOfType<PlayerController>();
         canvas = FindObjectOfType<Canvas>();
         title = FindObjectOfType<TextMesh>();
-        //teamName = LayerMask.LayerToName(collidedPlayer.gameObject.layer);
-
         Destroy(audioListener);
     }
 

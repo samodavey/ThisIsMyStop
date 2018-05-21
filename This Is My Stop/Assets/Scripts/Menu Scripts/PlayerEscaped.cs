@@ -16,6 +16,7 @@ public class PlayerEscaped : MonoBehaviour {
 
     void OnTriggerEnter(Collider playerCollider)
     {
+        //If escaping team hits escape point load escaped scene
         if(playerCollider.transform.parent.gameObject.tag == "Hunted")
         {
             SceneManager.LoadScene("Escaped",LoadSceneMode.Additive);

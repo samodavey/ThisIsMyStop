@@ -68,8 +68,6 @@ public class LobbySystem : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.JoystickButton7) && mainCamera.transform.localRotation.y != 180)
         {
-
-            //Maybe have the Camera lerp?
             mainCamera.transform.rotation = newRotation;
             mainCamera.transform.position = newVector;
             awayFromTitle = true;
@@ -89,7 +87,6 @@ public class LobbySystem : MonoBehaviour {
             else if (Input.GetKeyDown(playerControllers[i].lobbyLeave) && playerEntered[i] == true && lockedIn == false)
             {
                 PlayerLeft(i);
-                //print("Player " + i + " has left");
             }
             else if (Input.GetKeyDown(playerControllers[i].lobbyReady) && playerEntered[i] == true && playersConnected > 1)
             {
@@ -119,11 +116,10 @@ public class LobbySystem : MonoBehaviour {
             }
         }
 
-        //Debug.Log(playersConnected);
+
         if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("MainScene"))
         {
-            //MANAGE THE CAMERAS NICELY, REPLACE THE BACKGROUND OR ADJUST THE CAMERAS
-            //GameObject playerToDeactivate;
+            //Adjusts cameras dependant on which players are active within the main scene
             GameObject[] charactersToDeactivate;
 
             List<PlayerController> totalPlayers = new List<PlayerController>();
@@ -139,7 +135,6 @@ public class LobbySystem : MonoBehaviour {
 
                     for (int y = 0; y < charactersToDeactivate.Length; y++)
                     {
-                        //charactersToDeactivate[y].gameObject.SetActive(false);
                         Destroy(charactersToDeactivate[y]);
                     }
                 }
@@ -152,16 +147,10 @@ public class LobbySystem : MonoBehaviour {
             switch (playersConnected)
             {
                 case 2:
-
-                    //Array system gathers cameras in a bizarre order
-                    //NEED TO HAVE IT SO ONLY THE TEAMS THAT ARE AVAILABLE ARE SELECTED
                     totalPlayers[0].GetComponentInChildren<Camera>().rect = new Rect(new Vector2(0, 0.5f), new Vector2(1, 0.5f));
-                    totalPlayers[1].GetComponentInChildren<Camera>().rect = new Rect(new Vector2(0, 0), new Vector2(1, 0.5f));
-                    
+                    totalPlayers[1].GetComponentInChildren<Camera>().rect = new Rect(new Vector2(0, 0), new Vector2(1, 0.5f));   
                     break;
-
                 case 3:
-                    //Cheating a little bit here if player 3 or 4 is selected to enter
                     totalPlayers[0].GetComponentInChildren<Camera>().rect = new Rect(new Vector2(0, 0.5f), new Vector2(1, 0.5f));
                     totalPlayers[1].GetComponentInChildren<Camera>().rect = new Rect(new Vector2(0.5f, 0), new Vector2(0.5f, 0.5f));
                     totalPlayers[2].GetComponentInChildren<Camera>().rect = new Rect(new Vector2(0, 0), new Vector2(0.5f, 0.5f));

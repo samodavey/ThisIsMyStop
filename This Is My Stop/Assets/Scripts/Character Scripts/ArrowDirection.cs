@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class ArrowDirection : MonoBehaviour {
 
+    /// <summary>
+    /// This class is for specifying which direction the arrow gameobject points to
+    /// </summary>
+
     private Transform exitTarget;
 
     private GameObject[] playerTarget;
@@ -27,8 +31,11 @@ public class ArrowDirection : MonoBehaviour {
 
         if (transform.parent.tag == "Hunted")
         {
+            //Arrow transform looks at target
             transform.LookAt(exitTarget);
-            if(exitDist < 15)
+
+            //Disables arrow if within a certain distance
+            if (exitDist < 15)
             {
                 rend.enabled = false;
             }
@@ -45,10 +52,12 @@ public class ArrowDirection : MonoBehaviour {
 
                 if (assignedTarget.name.Contains("Player"))
                 {
+                    //Arrow transform looks at target
                     transform.LookAt(assignedTarget.transform);
                 }
 
-                if (playerDist < 30)
+                //Disables arrow if within a certain distance
+                if (playerDist < 15)
                 {
                     rend.enabled = false;
                 }

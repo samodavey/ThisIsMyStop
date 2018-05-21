@@ -5,6 +5,11 @@ using UnityEngine.Events;
 
 public class HitEventTrigger : MonoBehaviour
 {
+    /// <summary>
+    /// Checks if the chest or head has been hit and returns the relevant damage value
+    /// </summary>
+
+
     public UnityEvent onHit;
 
     private string hitBy;
@@ -34,6 +39,7 @@ public class HitEventTrigger : MonoBehaviour
             onHit.Invoke();
             if(audioSource != null)
             {
+                //Plays punching sound
                 audioSource.Play();
             }
             else
@@ -41,6 +47,7 @@ public class HitEventTrigger : MonoBehaviour
                 return;
             }
 
+            //Checks last gameobject to collide with the hunted team
             if (gameObject.transform.root.tag == "Hunted")
             {
                 hitBy = LayerMask.LayerToName(other.gameObject.layer);

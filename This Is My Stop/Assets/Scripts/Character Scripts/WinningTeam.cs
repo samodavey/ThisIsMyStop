@@ -10,6 +10,7 @@ public class WinningTeam : MonoBehaviour {
     
     void Awake()
     {
+        //Holds onto the winner string gameobject for the next scene
         DontDestroyOnLoad(gameObject);
     }
 }

@@ -3,6 +3,10 @@ using UnityEngine.SceneManagement;
 
 public class EscapedTeamMenu : MonoBehaviour {
 
+    /// <summary>
+    /// Gathers the appropriate data for the team that escaped
+    /// </summary>
+
 
     private PlayerController collidedPlayer;
     private Canvas canvas;
